@@ -16,11 +16,11 @@
   image_tag: "master"
   registry: https://gcr.io
   dockercfg_service: codeship_gcr_dockercfg
-- name: gke-initial-deployment
-  service: codeship_gce_service
-  tag: master
-  command: bin/create-deploy
-# - name: gke-update-services
-#   service: codeship_gce_service
-#   tag: master
-#   command: bin/deploy
+#- name: gke-initial-deployment
+#  service: codeship_gce_service
+#  tag: master
+#  command: bin/create-deploy
+ - name: gke-update-services
+   service: codeship_gce_service
+   tag: master
+   command: bin/deploy
