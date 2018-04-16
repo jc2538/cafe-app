@@ -5,12 +5,12 @@ app:
 codeship_gcr_dockercfg:
   image: codeship/gcr-dockercfg-generator
   env_file: .env
-  # encrypted_env_file: encrypted.env
+  encrypted_env_file: encrypted.env
   add_docker: true
 codeship_gce_service:
   image: codeship/google-cloud-deployment
   env_file: .env
-  # encrypted_env_file: encrypted.env
+  encrypted_env_file: encrypted.env
   add_docker: true
   working_dir: /deploy
   volumes:
