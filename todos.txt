@@ -1,0 +1,8 @@
+TEST CI/CD pipeline
+List wait times in a table format with columns: location, time published, and wait duration
+Select from a set of locations rather than writing your own
+Make time published a date-time format
+Make wait duration in minutes
+View by location
+View by hour
+Add prediction for current wait time at each location

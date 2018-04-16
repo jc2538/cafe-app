@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+. bin/authenticate
+
+echo "Updating $APP_NAME service to $IMAGE_NAME:$TAG"
+kubectl set image deployment/$APP_NAME $APP_NAME=$IMAGE_NAME:$TAG

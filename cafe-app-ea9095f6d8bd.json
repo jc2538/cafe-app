@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cafe-app-200914",
+  "private_key_id": "ea9095f6d8bd3aac4b75498bba202caf5098a89a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDvX3kbaN0hqkph\nWseQwfCttg8vrPZz6aLafcotIll9pNEvCJnXu7rqlLK9NKRSkqjRro1xNoypddtE\n86FU+jjLPI7QHM44/YAEhY/vkgOydQKls7JFLBJ13t9GhEmgVsIEI15kjQLfRFZX\nUBTMhn2faw6C5TkW0GSMP27QJNKwrKxhaHEzmnm29HEJ8Cb5VUsbp/78b7S3ctlQ\nIb3ghudTrZ80AzkI99DpGDE5Oc8A/tbiIunazolfPpuePyZRRRK/9S2iXwJDz9c+\nTWZSbcndC4bgA6g4oceQxEsUuBfFpaykUyug8OqxqszSKuS8+BFZJg+p9RZmkhgc\nOpWwsE/9AgMBAAECggEAFJoSec3yLkoSQcPG5koS1ViUgQVxZrOGjSiDZJQOwLYV\nPOeQGhWxtivbIFauB99QgU91I/fObm1S1GHlkkNA7RkGr5mzFAuZX4pBQ5y9Dbht\nZGaNYs+yvQtUCyUqkw60fxeuMZhDVYTzq2schyfSGwzjQFfLLI/9/2YcOvTYX1Uq\nljXJPGPbB8fMTMGgqrle8QH6Jz1eNdGILn3fO7Ai0L891g8n8bXLol3E3A8mMBy1\nL0Ftn7J5U0SklTkBU1rBBqOtBOpefkTDpKuC5dOxiZNrWwgSOZrMjeicszDxXV0/\npyNUefyL8AaqoDu25Gr2drJh5s8QXFVUJYA+tyhRjwKBgQD+hm7XgmjpzRkB959f\nmZM4J4lLZR8DJ2YHV2XZpqinsei+5MscPGP+f9fI1SalfpS+gHMQvc2EpVALKNvG\nxESzDi1whdmTaLrB27hyZopH+0kWD00VgiqO1PvBxyOnSaJljxax5pF4S/IIdJD0\nnWoqWuYnC4szGUW1eCsSMt8F9wKBgQDwwpAl+PHdz/6x99YJJSm6bwGf3GocsCCE\nir0J5MxGiTCecM4iy9FTuzkiwPrNIxAmOdsEBSYwSTHD3UXY8TADCy58S8XuRVeT\n/hFDGtBQsaEtAsEuiasoon7qTU0ROlWEM04l7la8ds4L1JxcRa9nELqPW8QKImZk\ndsr+Wx5MqwKBgQDSWCUoQ2USu2YMYyk554BsKvhi76nmgFvoe0j3y6ycEgKIKCrX\nJe15eQvKtKTgpjClEyCE2GcNVVVGM7kVlkQ0OeZBlMyP70BQT5YqLSXggQIQkgqh\nWNZ0/f0lUr7bVJY6GjumQCc+ZH0ckcDt912yrTaBVB/w1dTvOOVXf+UiVwKBgQDv\nkOpWnowtJxZMiEvV9cC73lFDfNOpkCgLOvI3sg8B8OkL/zterGiyZI3J4zSsgsND\nBjbEnUsOqQZ32unxoK0hmjK7Q7rECQPIIvuSRlAau2WhoCgR4rMJUAfxpNGW3vDR\nBywv2iU8iwskAn9D4aNTbvX0SF+dpfU06m+7AXf42QKBgBkZxHOdr6CuLFPxEtKf\nAOL7MClhXaKyT2CiHpzj2zlWiCL8+rgTS0qISuwZJGStioTJZn4u7w0wpWUA13qY\ntH5ayvNTMAcEm898FYENWkUri+BiMqH/2yo9Y0N7wuLPdTcmRKGxhelHxfEpsqbw\nlX8Cb9f/6kra6w6AZROnNqps\n-----END PRIVATE KEY-----\n",
+  "client_email": "cafe-app-200914@appspot.gserviceaccount.com",
+  "client_id": "111295774397076206693",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cafe-app-200914%40appspot.gserviceaccount.com"
+}

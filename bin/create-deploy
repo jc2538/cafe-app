@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+. bin/authenticate
+
+echo "Deploying $IMAGE_NAME to $IMAGE_NAME:$TAG"
+kubectl run $APP_NAME --image=$IMAGE_NAME:$TAG --port 8080
+
+echo "Exposing $APP_NAME to the internet"
+kubectl expose deployment $APP_NAME --type=LoadBalancer --port 8080
+
+echo "Listing services"
+kubectl get service
+
+echo "Scaling services"
+kubectl scale deployment $APP_NAME --replicas=3
+
+echo "Listing replicas"
+kubectl get deployment $APP_NAME
+
+echo "Listing pods"
+kubectl get pods
