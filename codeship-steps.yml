@@ -20,9 +20,9 @@
 #   service: codeship_gce_service
 #   tag: master
 #   command: bin/create-deploy
-- name: tests
-  service: app
-  command: python main.py test
+# - name: tests
+#   service: app
+#   command: python main.py
 - name: gke-update-services
   service: codeship_gce_service
   tag: master
