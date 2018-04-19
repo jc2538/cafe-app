@@ -8,12 +8,11 @@ FROM gcr.io/google-appengine/python
 ADD requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
-# Add application code.
-ADD . /app
+ADD main.py /
 
 # Instead of using gunicorn directly, we'll use Honcho. Honcho is a python port
 # of the Foreman process manager. $PROCESSES is set in the pod manifest
 # to control which processes Honcho will start.
 COPY . .
 ENV PORT 8080
-CMD honcho start -f /app/procfile $PROCESSES
+CMD [ "python", "./main.py" ]
