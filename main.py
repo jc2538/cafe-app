@@ -14,6 +14,8 @@
 
 import bookshelf
 import config
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "cafe-app-f9f9134f1cd3.json"
 
 
 # Note: debug=True is enabled here to help with troubleshooting. You should
