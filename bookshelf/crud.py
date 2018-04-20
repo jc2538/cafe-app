@@ -129,3 +129,28 @@ def edit(id):
 def delete(id):
     get_model().delete(id)
     return redirect(url_for('.list'))
+
+@crud.route('/query', methods=['GET', 'POST'])
+def query():
+    if request.method == 'POST':
+        data = request.form.to_dict(flat=True)
+
+        # If an image was uploaded, update the data to point to the new image.
+        # image_url = upload_image_file(request.files.get('image'))
+
+        # if image_url:
+        #     data['imageUrl'] = image_url
+
+        # If the user is logged in, associate their profile with the new book.
+        # if 'profile' in session:
+        #     data['createdBy'] = session['profile']['displayName']
+        #     data['createdById'] = session['profile']['id']
+
+        # wait = get_model().create(data)
+
+        # q = tasks.get_books_queue()
+        # q.enqueue(tasks.process_book, book['id'])
+
+        return redirect(url_for('.view', id=wait['id']))
+
+    return render_template("query.html", action="Add", wait={})
