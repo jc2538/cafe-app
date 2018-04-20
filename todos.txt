@@ -1,4 +1,4 @@
-TEST CI/CD pipeline
+Testing CI/CD pipeline
 List wait times in a table format with columns: location, time published, and wait duration
 Select from a set of locations rather than writing your own
 Make time published a date-time format
