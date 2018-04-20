@@ -151,6 +151,6 @@ def query():
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
 
-        return redirect(url_for('.view', id=wait['id']))
+        # return redirect(url_for('.view', id=wait['id']))
 
     return render_template("query.html", action="Add", wait={})
