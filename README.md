@@ -1,3 +1,14 @@
+To run:
+
+If running for the 1st time, first initialize the virtual environment and install requirements.
+	virtualenv cmle-env
+
+All subsequent times:
+	source cmle-env/bin/activate
+	pip install -r requirements.txt
+	python model.py
+
+
 # Deploy Bookshelf to Google Kubernetes Engine
 
 This optional tutorial will walk you through how to deploy the Bookshelf sample application to [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/). This tutorial is also applicable to [Kubernetes](http://kubernetes.io/) outside of Google Kubernetes Engine, but may require additional steps for external load balancing.
