@@ -19,7 +19,7 @@
 {% block content %}
 <h3>Get a Wait Time</h3>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="GET" enctype="multipart/form-data">
 
   <div class="form-group">
     <label for="title">Location</label>
@@ -32,10 +32,6 @@
   </div>
 
   <button type="submit" class="btn btn-success">Get Wait Time</button>
-
-  <div class="form-group">
-    <label for="response">Prediction: {{resp}}</label>
-  </div>
 </form>
 
 {% endblock %}
