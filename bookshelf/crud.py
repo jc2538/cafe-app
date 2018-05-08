@@ -132,7 +132,7 @@ def delete(id):
 
 @crud.route('/query', methods=['GET', 'POST'])
 def query():
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = request.form.to_dict(flat=True)
 
         # If an image was uploaded, update the data to point to the new image.
