@@ -79,10 +79,11 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
     # applications.
     @app.errorhandler(500)
     def server_error(e):
+        client = error_reporting.Client(app.config['PROJECT_ID'])
+        client.report_exception(
+            http_context=error_reporting.build_flask_context(request))
         return """
-        An internal error occurred: <pre>{}</pre>
-        See logs for full stacktrace.
-        """.format(e), 500
+        An internal error occurred.""", 500
 
     return app
 
