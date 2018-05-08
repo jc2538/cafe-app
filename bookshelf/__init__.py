@@ -86,6 +86,10 @@ def create_app(config, debug=False, testing=False, config_overrides=None):
 
     return app
 
+def get_prediction():
+    from . import ml_model
+    prediction = ml_model
+    return prediction
 
 def get_model():
     model_backend = current_app.config['DATA_BACKEND']
