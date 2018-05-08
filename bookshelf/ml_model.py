@@ -24,11 +24,8 @@ def predict_json(project, model, instances, version=None):
     if version is not None:
         name += '/versions/{}'.format(version)
 
-    print("halp")
-    print(project)
-    print(model)
-    print(version)
-    instances = [{"location_id": 0, "hour": 7, "minute": 30, "total_minutes": 420}]
+    #instances = [{"location_id": 0, "hour": 7, "minute": 30, "total_minutes": 420}]
+    print("instances here")
     print(instances)
 
     response = service.projects().predict(
