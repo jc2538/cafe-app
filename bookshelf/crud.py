@@ -152,6 +152,6 @@ def query():
         # q.enqueue(tasks.process_book, book['id'])
         data = request.form.to_dict(flat=True)
         response = get_prediction().predict_json('cafe-app-200914', 'cafe', data, 'v1')
-        return render_template("query.html", wait={}, resp=response)
+        return redirect(url_for(".query", wait={}, resp=response))
 
     return render_template("query.html", wait={}, resp="")
