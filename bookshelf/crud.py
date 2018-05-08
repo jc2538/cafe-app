@@ -132,7 +132,7 @@ def delete(id):
 
 @crud.route('/query', methods=['GET', 'POST'])
 def query():
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = request.form.to_dict(flat=True)
 
         # If an image was uploaded, update the data to point to the new image.
@@ -152,6 +152,6 @@ def query():
         # q.enqueue(tasks.process_book, book['id'])
         data = request.form.to_dict(flat=True)
         response = get_prediction().predict_json('cafe-app-200914', 'cafe', data, 'v1')
-        return redirect(url_for('.view', id=wait['id']))
+        return render_template("query.html", wait={}, resp=response)
 
-    return render_template("query.html", action="Add", wait={})
+    return render_template("query.html", wait={}, resp="")
