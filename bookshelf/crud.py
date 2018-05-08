@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from bookshelf import get_model, storage, tasks
+from bookshelf import get_model, get_prediction, storage, tasks
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
 
@@ -130,6 +130,10 @@ def delete(id):
     get_model().delete(id)
     return redirect(url_for('.list'))
 
+@crud.route('/query_display/<response>')
+def query_display(response):
+    return render_template("query_display.html", resp=response)
+
 @crud.route('/query', methods=['GET', 'POST'])
 def query():
     if request.method == 'POST':
@@ -150,13 +154,10 @@ def query():
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
+
         data = request.form.to_dict(flat=True)
         resp = get_prediction().predict_json('cafe-app-200914', 'cafe', data, 'v1')
-        return redirect(url_for(".query_display", response="resp"))
+        return redirect(url_for(".query_display", response=resp))
 
     return render_template("query.html", wait={}, resp="N/A")
-
-@crud.route('/<response>')
-def query_display(response):
-    return render_template("query_display.html", resp=response)
 
