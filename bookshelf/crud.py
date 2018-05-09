@@ -156,12 +156,12 @@ def query():
         # q.enqueue(tasks.process_book, book['id'])
 
         data = request.form.to_dict(flat=True)
-        # time = data['publishedTime']
-        # hour = int(time.split(":")[0])
-        # minute = int(time.split(":")[1])
-        # total_minutes = hour * 60 + minute
-        # modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
-        # resp = get_prediction().predict_json('cafe-app-200914', 'cafe', modified_data, 'v1')
+        time = data['publishedTime']
+        hour = int(time.split(":")[0])
+        minute = int(time.split(":")[1])
+        total_minutes = hour * 60 + minute
+        modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
+        resp = get_prediction().predict_json('cafe-app-200914', 'cafe', modified_data, 'v1')
         return redirect(url_for(".query_display", response=data))
 
     return render_template("query.html", wait={}, resp="N/A")
