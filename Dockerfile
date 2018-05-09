@@ -16,6 +16,8 @@ ENV PATH /env/bin:$PATH
 
 # Install dependencies.
 ADD requirements.txt /app/requirements.txt
+RUN pip install --upgrade google-api-python-client
+RUN pip install google-auth-tplib2
 RUN pip install -r /app/requirements.txt
 
 # Add application code.

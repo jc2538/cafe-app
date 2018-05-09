@@ -1,6 +1,6 @@
-# import googleapiclient.discovery
+import googleapiclient.discovery
 
-def predict_json():
+def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
 
     Args:
@@ -17,7 +17,7 @@ def predict_json():
     """
     # Create the ML Engine service object.
     # To authenticate set the environment variable
-    # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
+    GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     service = googleapiclient.discovery.build('ml', 'v1')
     name = 'projects/{}/models/{}'.format(project, model)
 
@@ -28,10 +28,10 @@ def predict_json():
     print("instances here")
     print(instances)
 
-    # response = service.projects().predict(
-    #     name=name,
-    #     body={'instances': instances}
-    # ).execute()
+    response = service.projects().predict(
+        name=name,
+        body={'instances': instances}
+    ).execute()
 
     print response
 
@@ -39,5 +39,5 @@ def predict_json():
         return "error"
         raise RuntimeError(response['error'])
 
-    # return str(response['predictions'][0]['predictions'][0]) + " minutes"
+    return str(response['predictions'][0]['predictions'][0]) + " minutes"
     return "okay"
