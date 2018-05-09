@@ -18,7 +18,7 @@ def predict_json(project, model, instances, version=None):
     # Create the ML Engine service object.
     # To authenticate set the environment variable
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    service = googleapiclient.discovery.build('ml', 'v1')
+    # service = googleapiclient.discovery.build('ml', 'v1')
     name = 'projects/{}/models/{}'.format(project, model)
 
     if version is not None:
@@ -28,10 +28,10 @@ def predict_json(project, model, instances, version=None):
     print("instances here")
     print(instances)
 
-    response = service.projects().predict(
-        name=name,
-        body={'instances': instances}
-    ).execute()
+    # response = service.projects().predict(
+    #     name=name,
+    #     body={'instances': instances}
+    # ).execute()
 
     print response
 
