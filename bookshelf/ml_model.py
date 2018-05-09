@@ -28,10 +28,10 @@ def predict_json(project, model, instances, version=None):
     print("instances here")
     print(instances)
 
-    response = service.projects().predict(
-        name=name,
-        body={'instances': instances}
-    ).execute()
+    # response = service.projects().predict(
+    #     name=name,
+    #     body={'instances': instances}
+    # ).execute()
 
     print response
 
