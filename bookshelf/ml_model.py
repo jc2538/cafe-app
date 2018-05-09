@@ -1,4 +1,4 @@
-# import googleapiclient.discovery
+import googleapiclient.discovery
 # import logging
 
 def predict_json(project, model, instances, version=None):
@@ -25,7 +25,7 @@ def predict_json(project, model, instances, version=None):
     # logging.info(instances)
     # logging.info(version)
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
+    # service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
     # logging.info('cred')
     name = 'projects/{}/models/{}'.format(project, model)
     # logging.info('name')
@@ -38,10 +38,10 @@ def predict_json(project, model, instances, version=None):
     print("instances here")
     print(instances)
 
-    response = service.projects().predict(
-        name=name,
-        body={'instances': instances}
-    ).execute()
+    # response = service.projects().predict(
+    #     name=name,
+    #     body={'instances': instances}
+    # ).execute()
 
     print response
 
@@ -49,5 +49,5 @@ def predict_json(project, model, instances, version=None):
         return "error"
         raise RuntimeError(response['error'])
 
-    return str(response['predictions'][0]['predictions'][0]) + " minutes"
+    # return str(response['predictions'][0]['predictions'][0]) + " minutes"
     return "okay"
