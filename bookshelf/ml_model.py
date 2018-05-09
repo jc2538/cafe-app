@@ -35,19 +35,19 @@ def predict_json(project, model, instances, version=None):
     # logging.info('version')
 
     #instances = [{"location_id": 0, "hour": 7, "minute": 30, "total_minutes": 420}]
-    print("instances here")
-    print(instances)
+    # print("instances here")
+    # print(instances)
 
     # response = service.projects().predict(
     #     name=name,
     #     body={'instances': instances}
     # ).execute()
 
-    print response
+    # print response
 
-    if 'error' in response:
-        return "error"
-        raise RuntimeError(response['error'])
+    # if 'error' in response:
+    #     return "error"
+    #     raise RuntimeError(response['error'])
 
     # return str(response['predictions'][0]['predictions'][0]) + " minutes"
     return "okay"
