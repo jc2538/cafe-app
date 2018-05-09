@@ -36,6 +36,8 @@ def predict_json(project, model, instances, version=None):
     print response
 
     if 'error' in response:
+        return "error"
         raise RuntimeError(response['error'])
 
-    return str(response['predictions'][0]['predictions'][0]) + " minutes"
+    # return str(response['predictions'][0]['predictions'][0]) + " minutes"
+    return "okay"
