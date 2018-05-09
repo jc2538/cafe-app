@@ -25,7 +25,7 @@ def predict_json(project, model, instances, version=None):
     # logging.info(instances)
     # logging.info(version)
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    # service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
+    service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
     # logging.info('cred')
     name = 'projects/{}/models/{}'.format(project, model)
     # logging.info('name')
