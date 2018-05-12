@@ -95,6 +95,8 @@ def add():
 
         wait = get_model().create(data)
 
+        # get_prediction().retrain_locally()
+
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
 
@@ -129,6 +131,11 @@ def edit(id):
 def delete(id):
     get_model().delete(id)
     return redirect(url_for('.list'))
+
+# @crud.route('/retrain_locally')
+# def retrain_locally():
+#     get_prediction().retrain_locally()
+#     return redirect(url_for('.list'))
 
 @crud.route('/query_display/<response>')
 def query_display(response):

@@ -51,3 +51,7 @@ def predict_json(project, model, instances, version=None):
 
     return str(response['predictions'][0]['predictions'][0]) + " minutes"
     # return "okay"
+
+# def retrain_locally() {
+    
+# }
