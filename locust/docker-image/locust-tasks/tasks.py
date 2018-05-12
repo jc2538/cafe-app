@@ -15,28 +15,39 @@
 # limitations under the License.
 
 
-import uuid
+import random
 
 from datetime import datetime
 from locust import HttpLocust, TaskSet, task
 
 
 class MetricsTaskSet(TaskSet):
-    _deviceid = None
+    # _location = None
+    # _duration = None
+    # _publishedTime = None
 
-    def on_start(self):
-        self._deviceid = str(uuid.uuid4())
+    # def on_start(self):
+    #     self._location = str("0") # TODO: change once all locationIds established
+    #     self._duration = str(random.randint(0,30))
 
     @task(1)
-    def login(self):
-        self.client.post(
-            '/login', {"deviceid": self._deviceid})
+    def add(self):
+        location = 0 # TODO: change once all locationIds established
+        duration = random.randint(0,30)
+        current_time = datetime.now()
+        publishedTime = str(current_time.hour) + ":" + str(current_time.minute)
 
-    @task(999)
-    def post_metrics(self):
         self.client.post(
-            "/metrics", {"deviceid": self._deviceid, "timestamp": datetime.now()})
+            '/add', {"location": location, "duration": duration, "publishedTime": publishedTime})
 
+    @task(4)
+    def query(self):
+        location_id = 0 # TODO: change once all locationIds established
+        current_time = datetime.now()
+        publishedTime = str(current_time.hour) + ":" + str(current_time.minute)
+
+        self.client.post(
+            "/query", {"location_id": location_id, "publishedTime": publishedTime})
 
 class MetricsLocust(HttpLocust):
     task_set = MetricsTaskSet
