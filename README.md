@@ -16,9 +16,11 @@ Go to http://127.0.0.1:8089/ to view the test UI, and enter the desired # users 
 To run cafe-app:
 
 If running for the 1st time, first initialize the virtual environment and install requirements.
+
 	virtualenv cmle-env
 
 All subsequent times:
+
 	source cmle-env/bin/activate
 	pip install -r requirements.txt
 	python model.py
