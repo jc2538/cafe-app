@@ -33,12 +33,12 @@ spec:
     spec:
       containers:
         - name: locust
-          image: gcr.io/cloud-solutions-images/locust-tasks:latest
+          image: gcr.io/cafe-app-200914/locust-tasks:latest
           env:
             - name: LOCUST_MODE
               value: master
             - name: TARGET_HOST
-              value: https://locust-tutorial.appspot.com
+              value: https://cafe-app-200914.appspot.com
           ports:
             - name: loc-master-web
               containerPort: 8089
