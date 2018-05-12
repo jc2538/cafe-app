@@ -1,4 +1,17 @@
-To run:
+To run locust load balance test:
+
+If running for the 1st time, first install locust:
+    pip install locustio
+
+To run the test suite locally from the root directory:
+    locust -f locust/docker-image/locust-tasks/tasks.py --host=http://35.202.182.170:8080/waits 
+
+Check to see that the host URL above is the latest external IP address of the cafe-app deployment. 
+
+Go to http://127.0.0.1:8089/ to view the test UI, and enter the desired # users and hatch rate.
+
+
+To run cafe-app:
 
 If running for the 1st time, first initialize the virtual environment and install requirements.
 	virtualenv cmle-env
