@@ -92,4 +92,4 @@ def edit(id):
 @crud.route('/<id>/delete')
 def delete(id):
     get_model().delete(id)
-    return redirect(url_for('.list_entities'))
+    return redirect(url_for('.list_waits'))

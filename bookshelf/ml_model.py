@@ -1,12 +1,17 @@
 import googleapiclient.discovery
-import logging
+import logging, requests
 
 def retrain():
     # TODO: Export entities into a csv for the training batch
     # TODO: Delete entities from the datastore
     # TODO: Concatenate csv with existing training data
     # TODO: Retrain
-    
+
+    GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
+
+    r = requests.post("https://datastore.googleapis.com/v1/projects/cafe-app-200914:export", data={"entityFilter": {"namespaceIds": [""]}, "outputUrlPrefix": "gs://cafe-app-datastore"}, headers={"Authorization": "Bearer ya29.Gl26Bd07RUfDh5zqZGm2tJtsTfSgm8Zr-7-MsLcY2oe1_ujVrVhCwW8I4wsypQHKT-M2pt-GyCB5_KGJcwlwIpW-CR8D1nvFnilk2A1q12zKna6HS1au9P_hfRzrBFU", "Content-Type": "application/json"})
+    print(r.status_code, r.reason, r.text)
+
     logging.info("RETRAIN UNIMPLEMENTED")
     print("RETRAIN UNIMPLEMENTED")
 
