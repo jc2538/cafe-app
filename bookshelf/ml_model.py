@@ -1,5 +1,6 @@
 import googleapiclient.discovery
-import logging, requests, os
+import logging, requests
+from json import dumps
 from subprocess import call
 
 def retrain():
@@ -10,11 +11,13 @@ def retrain():
 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 
-    # r = requests.post("https://datastore.googleapis.com/v1/projects/cafe-app-200914:export", data={"outputUrlPrefix": "gs://cafe-app-datastore"}, headers={"Authorization": "Bearer ya29.Gl26BXojlqcmKWRshyA8hcIMvJFHrBBzZsioda3joAk5MGQvUVNBaSfdpWbF-O3RkA5I6uchonazVyfXeNS6-R4kw3rcdJCcmw7S9596rfKqbn6bFP2q8OCOCg8LdNQ", "Content-Type": "application/json"})
-    # print(r.status_code, r.reason, r.text)
+    requestBody = {"entityFilter":{"kinds":["Wait"],"namespaceIds":[""]},"outputUrlPrefix":"gs://cafe-app-datastore"}
+    body = dumps(requestBody)
+    r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",data=str(body),headers={"Authorization":"Bearer ya29.Gl27BZ8w1QT-jyZUc1RO3HvV7Pwb5NlQwiwDSGSaDaqs9NwuK8S0K3qvacn2Y4bKx1EqUOxezbyC3ZZTjDkNQphxdgLmHCH47Jc7ZxHBAy6WUvX9LBjPkE1W430pVzE","Content-Type":"application/json"})
+    
+    print(r.status_code, r.reason, r.text)
 
-    # call(["gcloud", ""])
-    os.system("gcloud datastore export gs://cafe-app-datastore")
+    # os.system("gcloud datastore export gs://cafe-app-datastore")
     logging.info("RETRAIN UNIMPLEMENTED")
     print("RETRAIN UNIMPLEMENTED")
 
