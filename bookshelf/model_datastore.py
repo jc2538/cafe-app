@@ -60,27 +60,6 @@ def list(limit=10, cursor=None):
 
     return entities, next_cursor
 
-
-# def list_by_user(user_id, limit=10, cursor=None):
-#     ds = get_client()
-#     query = ds.query(
-#         kind='Book',
-#         filters=[
-#             ('createdById', '=', user_id)
-#         ]
-#     )
-
-#     query_iterator = query.fetch(limit=limit, start_cursor=cursor)
-#     page = next(query_iterator.pages)
-
-#     entities = builtin_list(map(from_datastore, page))
-#     next_cursor = (
-#         query_iterator.next_page_token.decode('utf-8')
-#         if query_iterator.next_page_token else None)
-
-#     return entities, next_cursor
-
-
 def read(id):
     ds = get_client()
     key = ds.key('Wait', int(id))

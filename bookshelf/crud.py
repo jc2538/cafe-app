@@ -27,15 +27,15 @@ def view(id):
 def add():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-
         num_entities = 1 + int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
-        
+        data["num_entities"] = num_entities
+
         wait = get_model().create(data)
-        wait["num_entities"] = num_entities
 
         #num_entities = int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
         print(str(num_entities))
         logging.info(str(num_entities))
+        
         if num_entities > 10:
             get_prediction().retrain()
 
