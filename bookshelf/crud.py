@@ -29,7 +29,7 @@ def add():
 
         wait = get_model().create(data)
 
-        num_entities = int(get_model().get_client().query(kind="__Stat_Total__").count)
+        num_entities = int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
         print(str(num_entities))
         if num_entities > 10:
             get_prediction().retrain()
