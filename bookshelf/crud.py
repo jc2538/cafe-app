@@ -27,8 +27,11 @@ def view(id):
 def add():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-        query = get_model().get_client().query(kind="Wait")
-        entities = list(query.fetch())
+
+        client = get_model().get_client()
+        query = client.query(kind="Wait")
+        iterator = query.fetch()
+        entities = list(iterator)
         num_entities = 1 + len(entities)
 
         data["num_entities"] = num_entities
