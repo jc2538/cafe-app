@@ -2,3 +2,8 @@ codeship.aes
 .env
 cafe-app-f9f9134f1cd3.json
 /pipeline-key/cafe-app-f9f9134f1cd3.json
+__pycache__
+cmle-env
+bookshelf/__pycache__/
+bookshelf/cmle-env/
+locust/docker-image/locust-tasks/__pycache__/

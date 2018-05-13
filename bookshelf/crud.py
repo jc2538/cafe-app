@@ -1,7 +1,6 @@
 from bookshelf import get_model, get_prediction, storage, tasks
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
-from google.appengine.ext.db import stats
 
 crud = Blueprint('crud', __name__)
 
@@ -30,8 +29,7 @@ def add():
 
         wait = get_model().create(data)
 
-        # num_entities = get_model.Query(['__Stat_Total__']).get().count
-        num_entities = int(stats.GlobalStat.all().get().count)
+        num_entities = int(get_model().get_client().query(kind="__Stat_Total__").count)
         print(str(num_entities))
         if num_entities > 10:
             get_prediction().retrain()
@@ -42,10 +40,6 @@ def add():
         return redirect(url_for('.view', id=wait['id']))
 
     return render_template("form.html", action="Add", wait={})
-
-# def retrain():
-#     get_prediction().retrain()
-#     return redirect(url_for('.list'))
 
 @crud.route('/query_display/<response>')
 def query_display(response):
