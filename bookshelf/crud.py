@@ -38,12 +38,12 @@ def add():
         data["num_entities"] = str(iterator)
         wait = get_model().create(data)
 
-        #num_entities = int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
-        print(str(num_entities))
-        logging.info(str(num_entities))
+        # num_entities = 1 + len(entities)
+        # print(str(num_entities))
+        # logging.info(str(num_entities))
 
-        if num_entities > 10:
-            get_prediction().retrain()
+        # if num_entities > 10:
+        #     get_prediction().retrain()
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
