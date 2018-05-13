@@ -11,14 +11,30 @@ def retrain():
 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 
-    requestBody = {"entityFilter":{"kinds":["Wait"],"namespaceIds":[""]},"outputUrlPrefix":"gs://cafe-app-datastore"}
+    requestBody = {
+        "entityFilter": {
+            "kinds": ["Wait"],
+            "namespaceIds": [""]
+            },
+        "outputUrlPrefix": "gs://cafe-app-datastore"
+        }
     body = dumps(requestBody)
-    r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",data=str(body),headers={"Authorization":"Bearer ya29.Gl27BZ8w1QT-jyZUc1RO3HvV7Pwb5NlQwiwDSGSaDaqs9NwuK8S0K3qvacn2Y4bKx1EqUOxezbyC3ZZTjDkNQphxdgLmHCH47Jc7ZxHBAy6WUvX9LBjPkE1W430pVzE","Content-Type":"application/json"})
+
+    r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
+        data=str(body),
+        headers={
+            "Authorization":"Bearer ya29.Gl27BZ8w1QT-jyZUc1RO3HvV7Pwb5NlQwiwDSGSaDaqs9NwuK8S0K3qvacn2Y4bKx1EqUOxezbyC3ZZTjDkNQphxdgLmHCH47Jc7ZxHBAy6WUvX9LBjPkE1W430pVzE",
+            "Content-Type":"application/json"}
+        )
     
     print(r.status_code, r.reason, r.text)
 
-    # os.system("gcloud datastore export gs://cafe-app-datastore")
-    logging.info("RETRAIN UNIMPLEMENTED")
+    responseData = r.json()
+    outputUrlPrefix = responseData["metadata"]["outputUrlPrefix"]
+    exportedDataPath = outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata"
+
+    print(exportedDataPath)
+
     print("RETRAIN UNIMPLEMENTED")
 
 def predict_json(project, model, instances, version=None):
