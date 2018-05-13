@@ -1,6 +1,8 @@
 import googleapiclient.discovery
 # import logging
-
+def retrain():
+    print("RETRAIN UNIMPLEMENTED")
+    
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
 
@@ -50,8 +52,3 @@ def predict_json(project, model, instances, version=None):
         raise RuntimeError(response['error'])
 
     return str(response['predictions'][0]['predictions'][0]) + " minutes"
-    # return "okay"
-
-# def retrain_locally() {
-    
-# }
