@@ -31,19 +31,21 @@ def add():
         client = get_model().get_client()
         query = client.query(kind="Wait")
         iterator = query.fetch()
-        # entities = list(iterator)
+        # pages = iterator.pages
+        # page = next(pages)
+        # entities = list(page)
         # num_entities = 1 + len(entities)
-
-        # data["num_entities"] = num_entities
-        data["num_entities"] = str(iterator)
+        num_entities = iterator.num_results
+        data["num_entities"] = num_entities
+        # data["num_entities"] = str(iterator)
         wait = get_model().create(data)
 
         # num_entities = 1 + len(entities)
-        # print(str(num_entities))
-        # logging.info(str(num_entities))
+        print(str(num_entities))
+        logging.info(str(num_entities))
 
-        # if num_entities > 10:
-        #     get_prediction().retrain()
+        if num_entities > 10:
+            get_prediction().retrain()
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
