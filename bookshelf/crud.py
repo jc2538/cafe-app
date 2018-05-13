@@ -31,10 +31,11 @@ def add():
         client = get_model().get_client()
         query = client.query(kind="Wait")
         iterator = query.fetch()
-        entities = list(iterator)
-        num_entities = 1 + len(entities)
+        # entities = list(iterator)
+        # num_entities = 1 + len(entities)
 
-        data["num_entities"] = num_entities
+        # data["num_entities"] = num_entities
+        data["num_entities"] = str(iterator)
         wait = get_model().create(data)
 
         #num_entities = int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
