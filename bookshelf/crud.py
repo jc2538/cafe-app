@@ -29,9 +29,9 @@ def add():
         data = request.form.to_dict(flat=True)
 
         num_entities = 1 + int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
-        wait["num_entities"] = num_entities
-
+        
         wait = get_model().create(data)
+        wait["num_entities"] = num_entities
 
         #num_entities = int(get_model().get_client().query(kind="__Stat_Total__").fetch().num_results)
         print(str(num_entities))
