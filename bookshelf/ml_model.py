@@ -2,9 +2,14 @@ import googleapiclient.discovery
 import logging
 
 def retrain():
+    # TODO: Export entities into a csv for the training batch
+    # TODO: Delete entities from the datastore
+    # TODO: Concatenate csv with existing training data
+    # TODO: Retrain
+    
     logging.info("RETRAIN UNIMPLEMENTED")
     print("RETRAIN UNIMPLEMENTED")
-    
+
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
 

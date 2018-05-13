@@ -32,21 +32,16 @@ def add():
         client = get_model().get_client()
         query = client.query(kind="Wait")
         iterator = query.fetch()
-        # pages = iterator.pages
-        # page = next(pages)
-        # entities = list(page)
         entities = list(iterator)
         num_entities = len(entities)
-        # num_entities = iterator.num_results
-        data["num_entities"] = num_entities
-        # data["num_entities"] = str(iterator)
-        wait = get_model().create(data)
+        data["num_entities"] = num_entities # Adding to view data
 
-        # num_entities = 1 + len(entities)
+        wait = get_model().create(data) # Saving to datastore
+
         print(str(num_entities))
         logging.info(str(num_entities))
 
-        if num_entities > 10:
+        if num_entities + 1 > 10: # Threshold is 10 to batch train, +1 is to include current entity
             get_prediction().retrain()
 
         # q = tasks.get_books_queue()
