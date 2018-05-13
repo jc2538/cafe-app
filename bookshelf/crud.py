@@ -1,9 +1,7 @@
-# from . import model_datastore
-import ml_model
-from google.appengine.ext.db import stats
 from bookshelf import get_model, get_prediction, storage, tasks
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
+from google.appengine.ext.db import stats
 
 crud = Blueprint('crud', __name__)
 
@@ -36,7 +34,7 @@ def add():
         num_entities = int(stats.GlobalStat.all().get().count)
         print(str(num_entities))
         if num_entities > 10:
-            ml_model.retrain()
+            get_prediction().retrain()
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
