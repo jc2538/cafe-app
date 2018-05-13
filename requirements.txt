@@ -19,6 +19,7 @@ gapic-google-cloud-error-reporting-v1beta1==0.15.3
 gapic-google-cloud-logging-v2==0.91.3
 gast==0.2.0
 google-api-core==0.1.4
+google-api-python-client==1.6.7
 google-auth==1.4.1
 google-cloud==0.32.0
 google-cloud-bigquery==0.28.0
@@ -82,5 +83,6 @@ SQLAlchemy==1.2.7
 tensorboard==1.8.0
 tensorflow==1.8.0
 termcolor==1.1.0
+uritemplate==3.0.0
 urllib3==1.22
 Werkzeug==0.14.1
