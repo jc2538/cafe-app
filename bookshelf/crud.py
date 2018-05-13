@@ -1,3 +1,4 @@
+# from __init__ import App
 from bookshelf import get_model, get_prediction, storage, tasks
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
@@ -6,7 +7,7 @@ import logging
 crud = Blueprint('crud', __name__)
 
 @crud.route("/")
-def list():
+def list_waits():
     token = request.args.get('page_token', None)
     if token:
         token = token.encode('utf-8')
@@ -34,8 +35,9 @@ def add():
         # pages = iterator.pages
         # page = next(pages)
         # entities = list(page)
-        # num_entities = 1 + len(entities)
-        num_entities = iterator.num_results
+        entities = list(iterator)
+        num_entities = len(entities)
+        # num_entities = iterator.num_results
         data["num_entities"] = num_entities
         # data["num_entities"] = str(iterator)
         wait = get_model().create(data)
@@ -95,4 +97,4 @@ def edit(id):
 @crud.route('/<id>/delete')
 def delete(id):
     get_model().delete(id)
-    return redirect(url_for('.list'))
+    return redirect(url_for('.list_entities'))

@@ -1,6 +1,8 @@
 import googleapiclient.discovery
-# import logging
+import logging
+
 def retrain():
+    logging.info("RETRAIN UNIMPLEMENTED")
     print("RETRAIN UNIMPLEMENTED")
     
 def predict_json(project, model, instances, version=None):
