@@ -5,7 +5,7 @@ from json import dumps
 from subprocess import call
 from google.cloud import bigquery
 
-#Submits job
+# Submits job
 def retrain_helper():
     JOB_NAME = 'cafe_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
     print(JOB_NAME)
@@ -45,11 +45,6 @@ def retrain_helper():
         logging.error(err._get_reason())
     
 def retrain():
-    # TODO: Delete entities from Datastore
-    # TODO: Export BigQuery table to Cloud Storage Bucket
-    # TODO: Concatenate csv with existing training data
-    # TODO: Retrain
-
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
@@ -165,13 +160,44 @@ def retrain():
     dataset_ref = client.dataset(dataset_id, project=project)
     table_ref = dataset_ref.table(table_id)
 
+    job_config_extract = bigquery.job.ExtractJobConfig()
+    job_config_extract.print_header = False
+
     extract_job = client.extract_table(
         table_ref,
-        destination_uri)  # API request
+        destination_uri,
+        job_config=job_config_extract)  # API request
     extract_job.result()  # Waits for job to complete.
 
     print('EXPORTED {}:{}.{} to {}'.format(
         project, dataset_id, table_id, destination_uri))
+
+    ### CONCATENATE TRAINING_DATA AND BATCH3 ###
+
+    requestBodyConcat = {
+      "sourceObjects": [
+        {
+          "name": "data/training_data.csv"
+        },
+        {
+          "name": "data/batch3.csv"
+        }
+      ],
+      "destination": {
+        "kind": "storage#object",
+        "bucket": "cafe-app-200914-mlengine"
+      }
+    }
+    bodyConcat = dumps(requestBodyConcat)
+
+    responseConcat = requests.post("https://www.googleapis.com/storage/v1/b/cafe-app-200914-mlengine/o/data%2ftraining_data_new.csv/compose",
+        data=str(bodyConcat),
+        headers={
+            "Authorization":"Bearer " + TOKEN,
+            "Content-Type":"application/json"}
+        )
+    print(responseConcat.status_code, responseConcat.reason, responseConcat.text)
+    responseConcat = responseConcat.json()
 
     retrain_helper()
 
