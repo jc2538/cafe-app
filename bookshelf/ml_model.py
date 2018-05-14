@@ -5,19 +5,19 @@ import logging, requests
 import time
 from json import dumps
 from subprocess import call
-from google_auth_oauthlib.flow import InstalledAppFlow
+# from google_auth_oauthlib.flow import InstalledAppFlow
 
-def get_token():
-    # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
-    # CLIENT_SECRET = Z2H7LsVOQN1gohstucRi9mRY
-    flow = InstalledAppFlow.from_client_secrets_file(
-        '/Users/jessicachen/Documents/College/CS5412/cafe-app/bookshelf/client_secret_795479451499-83ugvgq1giti1lusmufu1cnotf22v4mv.apps.googleusercontent.com.json',
-        scopes=['https://www.googleapis.com/auth/drive.metadata'])
-    credentials = flow.run_console()
-    print("credentials")
-    print(credentials)
-    print("end credentials")
-    return credentials 
+# def get_token():
+#     # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
+#     # CLIENT_SECRET = Z2H7LsVOQN1gohstucRi9mRY
+#     flow = InstalledAppFlow.from_client_secrets_file(
+#         '/Users/jessicachen/Documents/College/CS5412/cafe-app/bookshelf/client_secret_795479451499-83ugvgq1giti1lusmufu1cnotf22v4mv.apps.googleusercontent.com.json',
+#         scopes=['https://www.googleapis.com/auth/drive.metadata'])
+#     credentials = flow.run_console()
+#     print("credentials")
+#     print(credentials)
+#     print("end credentials")
+#     return credentials 
 
 # async def fetch(session, url, json):
 #     async with session.post(url, json=json) as response:
@@ -40,7 +40,7 @@ def retrain():
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 
     headers={
-        "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+        "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
         "Content-Type":"application/json"
         }
     urlDS = "https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export"
@@ -61,7 +61,7 @@ def retrain():
     responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
     data=str(bodyDS),
     headers={
-        "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+        "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
         "Content-Type":"application/json"}
     )
 
@@ -103,16 +103,16 @@ def retrain():
     bodyBQ = dumps(requestBodyBQ)
     # print("requestBodyBQ = ")
     # print(requestBodyBQ)
-    # print("bodyBQ = ")
-    # print(bodyBQ)
+    print("bodyBQ = ")
+    print(bodyBQ)
 
     # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
 
     time.sleep(5)
-    responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert",
+    responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs",
         data=str(bodyBQ),
         headers={
-            "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+            "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
             "Content-Type":"application/json"}
         )
     print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
