@@ -51,16 +51,7 @@ def retrain():
             },
         "outputUrlPrefix": "gs://cafe-app-datastore"
         }
-<<<<<<< HEAD
-    body = dumps(requestBody)
-    credentials_output = get_token()
-    r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
-        data=str(body),
-        headers={
-            "Authorization":credentials_output,
-            "Content-Type":"application/json"}
-        )
-=======
+        
     bodyDS = dumps(requestBodyDS)
        
     # loop = asyncio.new_event_loop()
