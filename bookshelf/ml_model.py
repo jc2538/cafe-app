@@ -174,6 +174,8 @@ def retrain():
     print('EXPORTED {}:{}.{} to {}'.format(
         project, dataset_id, table_id, destination_uri))
 
+    retrain_helper()
+
 
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
