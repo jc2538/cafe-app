@@ -131,7 +131,7 @@ def retrain():
     print("RESPONSEBQDATA = ")
     print(responseBQData)
 
-    time.sleep(15)
+    time.sleep(10)
 
     ### CREATE NEW BQ TABLE WITHOUT NESTED FIELDS BY QUERYING ABOVE TABLE ###
    
