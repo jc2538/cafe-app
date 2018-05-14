@@ -7,6 +7,8 @@ from subprocess import call
 
 async def fetch(session, url, json):
     async with session.post(url, json=json) as response:
+        print("FETCH RESULT = ")
+        print(response)
         return await response.json()
 
 async def request(url, body, headers):
@@ -52,46 +54,46 @@ def retrain():
     print("responseDSData = ")
     print(responseDSData)
 
-    # ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
-    # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
+    ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
+    big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
     
-    # outputUrlPrefix = responseDSData["metadata"]["outputUrlPrefix"]
-    # exportedDataPath = str(outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata")
+    outputUrlPrefix = responseDSData["metadata"]["outputUrlPrefix"]
+    exportedDataPath = str(outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata")
 
-    # print("exportedDataPath = " + exportedDataPath)
+    print("exportedDataPath = " + exportedDataPath)
 
-    # urlBQ = "https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert"
-    # requestBodyBQ = {
-    #   "configuration": {
-    #     "load": {
-    #       "sourceUris": [
-    #         exportedDataPath
-    #       ],
-    #       "sourceFormat": "DATASTORE_BACKUP",
-    #       "destinationTable": {
-    #         "datasetId": "training",
-    #         "projectId": "cafe-app-200914",
-    #         "tableId": "batch"
-    #       },
-    #       "timePartitioning": {
-    #         "type": "DAY"
-    #       },
-    #       "writeDisposition": "WRITE_TRUNCATE" 
-    #     }
-    #   },
-    #   "jobReference": {
-    #     "location": "US"
-    #   }
-    # }
-    # bodyBQ = dumps(requestBodyBQ)
-    # print("requestBodyBQ = ")
-    # print(requestBodyBQ)
+    urlBQ = "https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert"
+    requestBodyBQ = {
+      "configuration": {
+        "load": {
+          "sourceUris": [
+            exportedDataPath
+          ],
+          "sourceFormat": "DATASTORE_BACKUP",
+          "destinationTable": {
+            "datasetId": "training",
+            "projectId": "cafe-app-200914",
+            "tableId": "batch"
+          },
+          "timePartitioning": {
+            "type": "DAY"
+          },
+          "writeDisposition": "WRITE_TRUNCATE" 
+        }
+      },
+      "jobReference": {
+        "location": "US"
+      }
+    }
+    bodyBQ = dumps(requestBodyBQ)
+    print("requestBodyBQ = ")
+    print(requestBodyBQ)
     # print("bodyBQ = ")
     # print(bodyBQ)
 
-    # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
-    # print("responseBQData = ")
-    # print(responseBQData)
+    responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
+    print("responseBQData = ")
+    print(responseBQData)
     # responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert",
     #     data=str(bodyBQ),
     #     headers={
