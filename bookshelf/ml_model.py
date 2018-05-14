@@ -38,9 +38,10 @@ def retrain():
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
+    TOKEN='ya29.Gl27BTP9cA5uu_AJRqncJJY9jpT5BBxtX59Vq-q4s_-VybTIf8jr07fmvXeQwH9giiuY10yfCJuAVievAWCTF6o2AgEPKgZcsBdXQxOZBLwHCgJp56Kdg-saWF7JOzc'
 
     headers={
-        "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
+        "Authorization":"Bearer " + TOKEN,
         "Content-Type":"application/json"
         }
     urlDS = "https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export"
@@ -61,7 +62,7 @@ def retrain():
     responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
     data=str(bodyDS),
     headers={
-        "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
+        "Authorization":"Bearer " + TOKEN,
         "Content-Type":"application/json"}
     )
 
@@ -77,7 +78,7 @@ def retrain():
 
     print("exportedDataPath = " + exportedDataPath)
 
-    urlBQ = "https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert"
+    urlBQ = "https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs:insert"
     requestBodyBQ = {
       "configuration": {
         "load": {
@@ -109,10 +110,10 @@ def retrain():
     # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
 
     time.sleep(5)
-    responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs",
+    responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs",
         data=str(bodyBQ),
         headers={
-            "Authorization":"Bearer ya29.Gl27BWLgskrZ094q34pzPIrxvfB6Ei3KVEQt3DKiFnwHq1kL5ntXakM0T3194u56yPbczfqcaaDGG7MYMbyI_sWLaP1im9isV_QGain2A0eZ_uHybxWkK6BJ0cwoZzI",
+            "Authorization":"Bearer " + TOKEN,
             "Content-Type":"application/json"}
         )
     print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
