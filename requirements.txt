@@ -18,16 +18,16 @@ gapic-google-cloud-datastore-v1==0.15.3
 gapic-google-cloud-error-reporting-v1beta1==0.15.3
 gapic-google-cloud-logging-v2==0.91.3
 gast==0.2.0
-google-api-core==0.1.4
+google-api-core==1.1.2
 google-api-python-client==1.6.7
 google-auth==1.4.1
 google-cloud==0.32.0
-google-cloud-bigquery==0.28.0
+google-cloud-bigquery==1.1.0
 google-cloud-bigquery-datatransfer==0.1.1
 google-cloud-bigtable==0.28.1
 google-cloud-container==0.1.1
 google-cloud-core==0.28.1
-google-cloud-datastore==1.4.0
+google-cloud-datastore==1.5.0
 google-cloud-dns==0.28.0
 google-cloud-error-reporting==0.28.0
 google-cloud-firestore==0.28.0
@@ -54,6 +54,7 @@ honcho==1.0.1
 html5lib==0.9999999
 httplib2==0.11.3
 idna==2.6
+idna-ssl==1.0.1
 itsdangerous==0.24
 Jinja2==2.10
 Markdown==2.6.11
