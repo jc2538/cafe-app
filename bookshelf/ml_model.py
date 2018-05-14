@@ -5,6 +5,7 @@ from json import dumps
 from subprocess import call
 # from urllib2 import HTTPError
 from google.cloud import bigquery
+import __init__
 
 # Submits job
 # def retrain_helper():
@@ -54,9 +55,10 @@ def retrain():
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
 
     # retrain_helper() 
+    print("retraining here")
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     
-    TOKEN='ya29.Gl27BQ6UH1ob3AKQqho--lyzJ9kpGHjmklb6EEz_A6Nmv6qF6XZH2ycGZoRvq5YVK8pI35-xA8FJx356f5dGXrQB2aUUZCUwC3Bd8OFeU7FlpCjtYVC2_A2C65tjQRY'
+    TOKEN='ya29.Gl27BcTuyVue5YD0Tadhtq6b2YpvJTrgDha4QDDcg4KofJLAc6INgodjC6BngcrurgXzN76KIcpbDjTyDFhnwT1DLzHaUb4I-anIxCle8unE3QzjhfxEjEUwZrBbb8k'
 
     headers={
         "Authorization":"Bearer " + TOKEN,

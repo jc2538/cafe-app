@@ -43,6 +43,8 @@ def add():
 
         if num_entities + 1 > 10: # Threshold is 10 to batch train, +1 is to include current entity
             get_prediction().retrain()
+            # Delete all entities in the datastore now that they've been exported to csv file
+            get_model().delete_all()
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])

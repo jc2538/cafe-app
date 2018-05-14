@@ -89,3 +89,10 @@ def delete(id):
     ds = get_client()
     key = ds.key('Wait', int(id))
     ds.delete(key)
+
+def delete_all():
+    ds = get_client()
+    query = ds.query(kind='Wait')
+    fetched = query.fetch()
+    for entity in fetched:
+        ds.delete(entity.key)
