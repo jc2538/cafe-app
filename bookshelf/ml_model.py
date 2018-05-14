@@ -84,7 +84,7 @@ def retrain():
     print("RESPONSEDSDATA = ")
     print(responseDSData)
 
-    time.sleep(9)
+    time.sleep(10)
 
     ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
 
@@ -131,7 +131,7 @@ def retrain():
     print("RESPONSEBQDATA = ")
     print(responseBQData)
 
-    time.sleep(10)
+    time.sleep(15)
 
     ### CREATE NEW BQ TABLE WITHOUT NESTED FIELDS BY QUERYING ABOVE TABLE ###
    
