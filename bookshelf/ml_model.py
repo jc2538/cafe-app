@@ -1,35 +1,10 @@
 import googleapiclient.discovery
 import logging, requests
-# import aiohttp
-# import asyncio
 import time, datetime
 from json import dumps
 from subprocess import call
 from urllib2 import HTTPError
-# from google_auth_oauthlib.flow import InstalledAppFlow
-
-# def get_token():
-#     # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
-#     # CLIENT_SECRET = Z2H7LsVOQN1gohstucRi9mRY
-#     flow = InstalledAppFlow.from_client_secrets_file(
-#         '/Users/jessicachen/Documents/College/CS5412/cafe-app/bookshelf/client_secret_795479451499-83ugvgq1giti1lusmufu1cnotf22v4mv.apps.googleusercontent.com.json',
-#         scopes=['https://www.googleapis.com/auth/drive.metadata'])
-#     credentials = flow.run_console()
-#     print("credentials")
-#     print(credentials)
-#     print("end credentials")
-#     return credentials 
-
-# async def fetch(session, url, json):
-#     async with session.post(url, json=json) as response:
-#         print("FETCH RESULT = ")
-#         print(response)
-#         return await response.json()
-
-# async def request(url, body, headers):
-#     async with aiohttp.ClientSession(headers=headers) as session:
-#         response = await fetch(session, url, body)
-#         return response
+from google.cloud import bigquery
 
 # Submits job
 def retrain_helper():
@@ -71,13 +46,13 @@ def retrain_helper():
         logging.error(err._get_reason())
     
 def retrain():
-    # TODO: Export entities into a csv for the training batch
-    # TODO: Delete entities from the datastore
+    # TODO: Delete entities from Datastore
+    # TODO: Export BigQuery table to Cloud Storage Bucket
     # TODO: Concatenate csv with existing training data
     # TODO: Retrain
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
-    retrain_helper()
+    retrain_helper() 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     TOKEN='ya29.Gl27BTWmlLRPAu3hZih54jRcW-koCJejgcmdVqDUVfa0u1xH2LiI5qUcRo8J7Shp_Fqe_GNVET05HEUiVmVs8-1DnycnOrBl5weSglDV8UZjRKSA0TDU63tjYn5ZSKE'
 
@@ -96,10 +71,6 @@ def retrain():
         
     bodyDS = dumps(requestBodyDS)
        
-    # loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(loop)
-    # responseDSData = loop.run_until_complete(request(urlDS, requestBodyDS, headers))
-
     responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
     data=str(bodyDS),
     headers={
@@ -120,7 +91,6 @@ def retrain():
     print("exportedDataPath = " + exportedDataPath)
 
     urlBQ = "https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs"
-
     requestBodyBQ = {
       "configuration": {
         "load": {
@@ -136,7 +106,12 @@ def retrain():
           "timePartitioning": {
             "type": "DAY"
           },
-          "writeDisposition": "WRITE_TRUNCATE" 
+          "writeDisposition": "WRITE_TRUNCATE",
+          "schema": {
+            "fields" : [
+                "duration"
+            ]
+          }
         }
       },
       "jobReference": {
@@ -144,12 +119,6 @@ def retrain():
       }
     }
     bodyBQ = dumps(requestBodyBQ)
-    # print("requestBodyBQ = ")
-    # print(requestBodyBQ)
-    print("bodyBQ = ")
-    print(bodyBQ)
-
-    # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
 
     time.sleep(10)
 
@@ -163,6 +132,30 @@ def retrain():
     responseBQData = responseBQ.json()
     print("responseBQData = ")
     print(responseBQData)
+
+    time.sleep(50)
+
+    # TODO: Create new BigQuery table from a query of the table we just made above so it only has fields duration, publishedTime, and location (no nested fields)
+
+    ### EXPORT BIGQUERY TABLE TO CLOUD STORAGE BUCKET AS CSV ###
+    client = bigquery.Client()
+    bucket_name = "cafe-app-200914-mlengine"
+    project = "cafe-app-200914"
+    dataset_id = 'training'
+    table_id = 'batch' # TODO: Change this to the new table without nested fields
+
+    destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch.csv')
+    dataset_ref = client.dataset(dataset_id, project=project)
+    table_ref = dataset_ref.table(table_id)
+
+    extract_job = client.extract_table(
+        table_ref,
+        destination_uri)  # API request
+    extract_job.result()  # Waits for job to complete.
+
+    print('Exported {}:{}.{} to {}'.format(
+        project, dataset_id, table_id, destination_uri))
+
 
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
@@ -179,37 +172,33 @@ def predict_json(project, model, instances, version=None):
         Mapping[str: any]: dictionary of prediction results defined by the
             model.
     """
-    # Create the ML Engine service object.
-    # To authenticate set the environment variable
-    # logging.basicConfig(filename='ml_model.log', level=logging.INFO)
-    # logging.info('inside')
-    # logging.info(project)
-    # logging.info(model)
-    # logging.info(instances)
-    # logging.info(version)
+
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
-    # logging.info('cred')
     name = 'projects/{}/models/{}'.format(project, model)
-    # logging.info('name')
 
     if version is not None:
         name += '/versions/{}'.format(version)
-    # logging.info('version')
-
-    #instances = [{"location_id": 0, "hour": 7, "minute": 30, "total_minutes": 420}]
-    # print("instances here")
-    # print(instances)
 
     response = service.projects().predict(
         name=name,
         body={'instances': instances}
     ).execute()
 
-    # print response
-
     if 'error' in response:
         return "error"
         raise RuntimeError(response['error'])
 
     return str(response['predictions'][0]['predictions'][0]) + " minutes"
+
+# def get_token():
+#     # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
+#     # CLIENT_SECRET = Z2H7LsVOQN1gohstucRi9mRY
+#     flow = InstalledAppFlow.from_client_secrets_file(
+#         '/Users/jessicachen/Documents/College/CS5412/cafe-app/bookshelf/client_secret_795479451499-83ugvgq1giti1lusmufu1cnotf22v4mv.apps.googleusercontent.com.json',
+#         scopes=['https://www.googleapis.com/auth/drive.metadata'])
+#     credentials = flow.run_console()
+#     print("credentials")
+#     print(credentials)
+#     print("end credentials")
+#     return credentials 
