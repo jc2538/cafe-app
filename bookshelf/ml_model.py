@@ -2,6 +2,19 @@ import googleapiclient.discovery
 import logging, requests
 from json import dumps
 from subprocess import call
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+def get_token():
+    # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
+    # CLIENT_SECRET = Z2H7LsVOQN1gohstucRi9mRY
+    flow = InstalledAppFlow.from_client_secrets_file(
+        '/Users/jessicachen/Documents/College/CS5412/cafe-app/bookshelf/client_secret_795479451499-83ugvgq1giti1lusmufu1cnotf22v4mv.apps.googleusercontent.com.json',
+        scopes=['https://www.googleapis.com/auth/drive.metadata'])
+    credentials = flow.run_console()
+    print("credentials")
+    print(credentials)
+    print("end credentials")
+    return credentials 
 
 def retrain():
     # TODO: Export entities into a csv for the training batch
@@ -19,11 +32,11 @@ def retrain():
         "outputUrlPrefix": "gs://cafe-app-datastore"
         }
     body = dumps(requestBody)
-
+    credentials_output = get_token()
     r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
         data=str(body),
         headers={
-            "Authorization":"Bearer ya29.Gl27BZ8w1QT-jyZUc1RO3HvV7Pwb5NlQwiwDSGSaDaqs9NwuK8S0K3qvacn2Y4bKx1EqUOxezbyC3ZZTjDkNQphxdgLmHCH47Jc7ZxHBAy6WUvX9LBjPkE1W430pVzE",
+            "Authorization":credentials_output,
             "Content-Type":"application/json"}
         )
     
@@ -32,7 +45,6 @@ def retrain():
     responseData = r.json()
     outputUrlPrefix = responseData["metadata"]["outputUrlPrefix"]
     exportedDataPath = outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata"
-
     print(exportedDataPath)
 
     print("RETRAIN UNIMPLEMENTED")
