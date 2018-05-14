@@ -1,20 +1,21 @@
 import googleapiclient.discovery
 import logging, requests
-import aiohttp
-import asyncio
+# import aiohttp
+# import asyncio
+import time
 from json import dumps
 from subprocess import call
 
-async def fetch(session, url, json):
-    async with session.post(url, json=json) as response:
-        print("FETCH RESULT = ")
-        print(response)
-        return await response.json()
+# async def fetch(session, url, json):
+#     async with session.post(url, json=json) as response:
+#         print("FETCH RESULT = ")
+#         print(response)
+#         return await response.json()
 
-async def request(url, body, headers):
-    async with aiohttp.ClientSession(headers=headers) as session:
-        response = await fetch(session, url, body)
-        return response
+# async def request(url, body, headers):
+#     async with aiohttp.ClientSession(headers=headers) as session:
+#         response = await fetch(session, url, body)
+#         return response
 
 def retrain():
     # TODO: Export entities into a csv for the training batch
@@ -38,19 +39,19 @@ def retrain():
         "outputUrlPrefix": "gs://cafe-app-datastore"
         }
     bodyDS = dumps(requestBodyDS)
-    
-        
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    responseDSData = loop.run_until_complete(request(urlDS, requestBodyDS, headers))
+       
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # responseDSData = loop.run_until_complete(request(urlDS, requestBodyDS, headers))
 
-    # responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
-    # data=str(bodyDS),
-    # headers={
-    #     "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
-    #     "Content-Type":"application/json"}
-    # )
+    responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
+    data=str(bodyDS),
+    headers={
+        "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+        "Content-Type":"application/json"}
+    )
 
+    responseDSData = responseDS.json()
     print("responseDSData = ")
     print(responseDSData)
 
@@ -86,22 +87,24 @@ def retrain():
       }
     }
     bodyBQ = dumps(requestBodyBQ)
-    print("requestBodyBQ = ")
-    print(requestBodyBQ)
+    # print("requestBodyBQ = ")
+    # print(requestBodyBQ)
     # print("bodyBQ = ")
     # print(bodyBQ)
 
-    responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
+    # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
+
+    time.sleep(5)
+    responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert",
+        data=str(bodyBQ),
+        headers={
+            "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+            "Content-Type":"application/json"}
+        )
+    print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
+    responseBQData = responseBQ.json()
     print("responseBQData = ")
     print(responseBQData)
-    # responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert",
-    #     data=str(bodyBQ),
-    #     headers={
-    #         "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
-    #         "Content-Type":"application/json"}
-    #     )
-    # print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
-    # responseBQData = responseBQ.json()
 
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
