@@ -3,47 +3,47 @@ import logging, requests
 import time, datetime
 from json import dumps
 from subprocess import call
-from urllib2 import HTTPError
+# from urllib2 import HTTPError
 from google.cloud import bigquery
 
 # Submits job
-def retrain_helper():
-    JOB_NAME = 'cafe_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
-    print(JOB_NAME)
-    training_inputs = {'scaleTier': 'STANDARD_1',
-        # 'masterType': 'complex_model_m',
-        # 'workerType': 'complex_model_m',
-        # 'parameterServerType': 'large_model',
-        # 'workerCount': 9,
-        # 'parameterServerCount': 3,
-        'packageUris': ['gs://cafe-app-200914-mlengine/trainer-0.0.0.tar.gz'],
-        'pythonModule': 'trainer.task',
-        'args': ['--train-files', 'gs://cafe-app-200914-mlengine/data/training_data.csv', '--eval-files', 'gs://cafe-app-200914-mlengine/data/test_data.csv', "--train-steps", "1000", "--verbosity", "DEBUG", "--eval-steps", "100"],
-        'region': 'us-central1',
-        'jobDir': 'gs://cafe-app-200914-mlengine/' + JOB_NAME,
-        'runtimeVersion': '1.4'}
+# def retrain_helper():
+#     JOB_NAME = 'cafe_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+#     print(JOB_NAME)
+#     training_inputs = {'scaleTier': 'STANDARD_1',
+#         # 'masterType': 'complex_model_m',
+#         # 'workerType': 'complex_model_m',
+#         # 'parameterServerType': 'large_model',
+#         # 'workerCount': 9,
+#         # 'parameterServerCount': 3,
+#         'packageUris': ['gs://cafe-app-200914-mlengine/trainer-0.0.0.tar.gz'],
+#         'pythonModule': 'trainer.task',
+#         'args': ['--train-files', 'gs://cafe-app-200914-mlengine/data/training_data.csv', '--eval-files', 'gs://cafe-app-200914-mlengine/data/test_data.csv', "--train-steps", "1000", "--verbosity", "DEBUG", "--eval-steps", "100"],
+#         'region': 'us-central1',
+#         'jobDir': 'gs://cafe-app-200914-mlengine/' + JOB_NAME,
+#         'runtimeVersion': '1.4'}
 
-    job_spec = {'jobId': JOB_NAME, 'trainingInput': training_inputs}
+#     job_spec = {'jobId': JOB_NAME, 'trainingInput': training_inputs}
 
-    project_name = 'cafe-app-200914'
-    project_id = 'projects/{}'.format(project_name)
-    cloudml = googleapiclient.discovery.build('ml', 'v1')
+#     project_name = 'cafe-app-200914'
+#     project_id = 'projects/{}'.format(project_name)
+#     cloudml = googleapiclient.discovery.build('ml', 'v1')
 
-    request = cloudml.projects().jobs().create(body=job_spec,
-                parent=project_id)
-    # response = request.execute()
+#     request = cloudml.projects().jobs().create(body=job_spec,
+#                 parent=project_id)
+#     # response = request.execute()
 
-    try:
-        response = request.execute()
-        # You can put your code for handling success (if any) here.
+#     try:
+#         response = request.execute()
+#         # You can put your code for handling success (if any) here.
 
-    except HTTPError, err:
-        # Do whatever error response is appropriate for your application.
-        # For this example, just send some text to the logs.
-        # You need to import logging for this to work.
-        logging.error('There was an error creating the training job.'
-                      ' Check the details:')
-        logging.error(err._get_reason())
+#     except HTTPError as err:
+#         # Do whatever error response is appropriate for your application.
+#         # For this example, just send some text to the logs.
+#         # You need to import logging for this to work.
+#         logging.error('There was an error creating the training job.'
+#                       ' Check the details:')
+#         logging.error(err._get_reason())
     
 def retrain():
     # TODO: Delete entities from Datastore
@@ -52,9 +52,11 @@ def retrain():
     # TODO: Retrain
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
-    retrain_helper() 
+
+    # retrain_helper() 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    TOKEN='ya29.Gl27BeZAze8-hxxyAOCyHKCtSJWOVkPXL4iKRTj19zqZJ5GhNe5lczzEWVXRq_sQRbV5zHJnKmAIj-0XagpoMLy5q0zNXHpKVj3_HnSInWqgQL9MISmXzAOrKmlN_SM'
+    
+    TOKEN='ya29.Gl27BYLMYPa-9qHPMIWxIM8xdLuLMkEjUHBGRCz4CU9-2wa4J3L5kL0toDYujHF8Qzy4eZh385Ffzq4fyqeJlHfQKgUuEX47gW8K7HRQ_5F1rx7Io5WN9KJM7bfwW-c'
 
     headers={
         "Authorization":"Bearer " + TOKEN,
@@ -79,16 +81,19 @@ def retrain():
     )
 
     responseDSData = responseDS.json()
-    print("responseDSData = ")
+    print("RESPONSEDSDATA = ")
     print(responseDSData)
 
+    time.sleep(9)
+
     ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
+
     big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
     
     outputUrlPrefix = responseDSData["metadata"]["outputUrlPrefix"]
     exportedDataPath = str(outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata")
 
-    print("exportedDataPath = " + exportedDataPath)
+    print("EXPORTEDDATAPATH = " + exportedDataPath)
 
     urlBQ = "https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs"
     requestBodyBQ = {
@@ -97,46 +102,23 @@ def retrain():
           "sourceUris": [
             exportedDataPath
           ],
-          "projectionFields": [
-            "duration",
-            "num_entities",
-            "publishedTime",
-            "location",
-          ],
           "sourceFormat": "DATASTORE_BACKUP",
           "destinationTable": {
             "projectId": "cafe-app-200914",
             "datasetId": "training",
-            "tableId": "batch2"
+            "tableId": "batch"
           },
           "timePartitioning": {
             "type": "DAY"
           },
-          "writeDisposition": "WRITE_TRUNCATE",
-          "tableDefinitions": {
-            "schema": {
-                "fields" : [
-                    "duration"
-                ]
-            }
-          }
-          # "schema": {
-          #   "fields" : [
-          #       "duration"
-          #   ]
-          # }
+          "writeDisposition": "WRITE_TRUNCATE"
         }
       },
       "jobReference": {
         "location": "US"
-      },
-      "query": {
-        "flattenResults": True
       }
     }
-    bodyBQ = dumps(requestBodyBQ)
-
-    time.sleep(10)
+    bodyBQ = dumps(requestBodyBQ)    
 
     responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs",
         data=str(bodyBQ),
@@ -146,21 +128,42 @@ def retrain():
         )
     print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
     responseBQData = responseBQ.json()
-    print("responseBQData = ")
+    print("RESPONSEBQDATA = ")
     print(responseBQData)
 
-    time.sleep(50)
+    time.sleep(10)
 
-    # TODO: Create new BigQuery table from a query of the table we just made above so it only has fields duration, publishedTime, and location (no nested fields)
+    ### CREATE NEW BQ TABLE WITHOUT NESTED FIELDS BY QUERYING ABOVE TABLE ###
+   
+    client = bigquery.Client()
+
+    job_config = bigquery.QueryJobConfig()
+
+    table_ref = client.dataset("training").table("batch3")
+    job_config.destination = table_ref
+    job_config.write_disposition = bigquery.WriteDisposition.WRITE_TRUNCATE
+
+    # Start the query, passing in the extra configuration.
+    query =  (
+        'SELECT location, publishedTime, duration '
+        'FROM `training.batch`')
+    query_job = client.query(
+        query,
+        location='US',
+        job_config=job_config)  # API request - starts the query
+
+    rows = list(query_job)  # Waits for the query to finish
+    print("QUERY JOB FINISHED WITH 1ST ROW = " + str(rows[0]))
+    # print(rows)
 
     ### EXPORT BIGQUERY TABLE TO CLOUD STORAGE BUCKET AS CSV ###
-    client = bigquery.Client()
+    
     bucket_name = "cafe-app-200914-mlengine"
     project = "cafe-app-200914"
     dataset_id = 'training'
-    table_id = 'batch2' # TODO: Change this to the new table without nested fields
+    table_id = 'batch3' # TODO: Change this to the new table without nested fields
 
-    destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch2.csv')
+    destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch3.csv')
     dataset_ref = client.dataset(dataset_id, project=project)
     table_ref = dataset_ref.table(table_id)
 
@@ -169,7 +172,7 @@ def retrain():
         destination_uri)  # API request
     extract_job.result()  # Waits for job to complete.
 
-    print('Exported {}:{}.{} to {}'.format(
+    print('EXPORTED {}:{}.{} to {}'.format(
         project, dataset_id, table_id, destination_uri))
 
 
