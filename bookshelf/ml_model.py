@@ -52,9 +52,9 @@ def retrain():
     # TODO: Retrain
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
-    retrain_helper() 
+    #retrain_helper() 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    TOKEN='ya29.Gl27BTWmlLRPAu3hZih54jRcW-koCJejgcmdVqDUVfa0u1xH2LiI5qUcRo8J7Shp_Fqe_GNVET05HEUiVmVs8-1DnycnOrBl5weSglDV8UZjRKSA0TDU63tjYn5ZSKE'
+    TOKEN='ya29.Gl27BeZAze8-hxxyAOCyHKCtSJWOVkPXL4iKRTj19zqZJ5GhNe5lczzEWVXRq_sQRbV5zHJnKmAIj-0XagpoMLy5q0zNXHpKVj3_HnSInWqgQL9MISmXzAOrKmlN_SM'
 
     headers={
         "Authorization":"Bearer " + TOKEN,
@@ -97,25 +97,41 @@ def retrain():
           "sourceUris": [
             exportedDataPath
           ],
+          "projectionFields": [
+            "duration",
+            "num_entities",
+            "publishedTime",
+            "location",
+          ],
           "sourceFormat": "DATASTORE_BACKUP",
           "destinationTable": {
             "projectId": "cafe-app-200914",
             "datasetId": "training",
-            "tableId": "batch"
+            "tableId": "batch2"
           },
           "timePartitioning": {
             "type": "DAY"
           },
           "writeDisposition": "WRITE_TRUNCATE",
-          "schema": {
-            "fields" : [
-                "duration"
-            ]
+          "tableDefinitions": {
+            "schema": {
+                "fields" : [
+                    "duration"
+                ]
+            }
           }
+          # "schema": {
+          #   "fields" : [
+          #       "duration"
+          #   ]
+          # }
         }
       },
       "jobReference": {
         "location": "US"
+      },
+      "query": {
+        "flattenResults": True
       }
     }
     bodyBQ = dumps(requestBodyBQ)
@@ -142,9 +158,9 @@ def retrain():
     bucket_name = "cafe-app-200914-mlengine"
     project = "cafe-app-200914"
     dataset_id = 'training'
-    table_id = 'batch' # TODO: Change this to the new table without nested fields
+    table_id = 'batch2' # TODO: Change this to the new table without nested fields
 
-    destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch.csv')
+    destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch2.csv')
     dataset_ref = client.dataset(dataset_id, project=project)
     table_ref = dataset_ref.table(table_id)
 
