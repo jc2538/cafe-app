@@ -2,9 +2,10 @@ import googleapiclient.discovery
 import logging, requests
 # import aiohttp
 # import asyncio
-import time
+import time, datetime
 from json import dumps
 from subprocess import call
+from urllib2 import HTTPError
 # from google_auth_oauthlib.flow import InstalledAppFlow
 
 # def get_token():
@@ -30,6 +31,45 @@ from subprocess import call
 #         response = await fetch(session, url, body)
 #         return response
 
+# Submits job
+def retrain_helper():
+    JOB_NAME = 'cafe_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+    print(JOB_NAME)
+    training_inputs = {'scaleTier': 'STANDARD_1',
+        # 'masterType': 'complex_model_m',
+        # 'workerType': 'complex_model_m',
+        # 'parameterServerType': 'large_model',
+        # 'workerCount': 9,
+        # 'parameterServerCount': 3,
+        'packageUris': ['gs://cafe-app-200914-mlengine/trainer-0.0.0.tar.gz'],
+        'pythonModule': 'trainer.task',
+        'args': ['--train-files', 'gs://cafe-app-200914-mlengine/data/training_data.csv', '--eval-files', 'gs://cafe-app-200914-mlengine/data/test_data.csv', "--train-steps", "1000", "--verbosity", "DEBUG", "--eval-steps", "100"],
+        'region': 'us-central1',
+        'jobDir': 'gs://cafe-app-200914-mlengine/' + JOB_NAME,
+        'runtimeVersion': '1.4'}
+
+    job_spec = {'jobId': JOB_NAME, 'trainingInput': training_inputs}
+
+    project_name = 'cafe-app-200914'
+    project_id = 'projects/{}'.format(project_name)
+    cloudml = googleapiclient.discovery.build('ml', 'v1')
+
+    request = cloudml.projects().jobs().create(body=job_spec,
+                parent=project_id)
+    # response = request.execute()
+
+    try:
+        response = request.execute()
+        # You can put your code for handling success (if any) here.
+
+    except HTTPError, err:
+        # Do whatever error response is appropriate for your application.
+        # For this example, just send some text to the logs.
+        # You need to import logging for this to work.
+        logging.error('There was an error creating the training job.'
+                      ' Check the details:')
+        logging.error(err._get_reason())
+    
 def retrain():
     # TODO: Export entities into a csv for the training batch
     # TODO: Delete entities from the datastore
@@ -37,8 +77,9 @@ def retrain():
     # TODO: Retrain
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
+    retrain_helper()
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    TOKEN='ya29.Gl27BTP9cA5uu_AJRqncJJY9jpT5BBxtX59Vq-q4s_-VybTIf8jr07fmvXeQwH9giiuY10yfCJuAVievAWCTF6o2AgEPKgZcsBdXQxOZBLwHCgJp56Kdg-saWF7JOzc'
+    TOKEN='ya29.Gl27BTWmlLRPAu3hZih54jRcW-koCJejgcmdVqDUVfa0u1xH2LiI5qUcRo8J7Shp_Fqe_GNVET05HEUiVmVs8-1DnycnOrBl5weSglDV8UZjRKSA0TDU63tjYn5ZSKE'
 
     headers={
         "Authorization":"Bearer " + TOKEN,
