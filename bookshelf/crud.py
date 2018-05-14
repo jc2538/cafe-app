@@ -54,7 +54,7 @@ def add():
         print(str(num_entities))
         logging.info(str(num_entities))
 
-        if num_entities + 1 > 10: # Threshold is 10 to batch train, +1 is to include current entity
+        if num_entities + 1 > 2: # Threshold is 10 to batch train, +1 is to include current entity
             get_prediction().retrain()
             # Delete all entities in the datastore now that they've been exported to csv file
             get_model().delete_all()
