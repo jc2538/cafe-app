@@ -78,7 +78,8 @@ def retrain():
 
     print("exportedDataPath = " + exportedDataPath)
 
-    urlBQ = "https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs:insert"
+    urlBQ = "https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs"
+
     requestBodyBQ = {
       "configuration": {
         "load": {
@@ -87,8 +88,8 @@ def retrain():
           ],
           "sourceFormat": "DATASTORE_BACKUP",
           "destinationTable": {
-            "datasetId": "training",
             "projectId": "cafe-app-200914",
+            "datasetId": "training",
             "tableId": "batch"
           },
           "timePartitioning": {
@@ -109,7 +110,8 @@ def retrain():
 
     # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
 
-    time.sleep(5)
+    time.sleep(10)
+
     responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/cafe-app-200914/jobs",
         data=str(bodyBQ),
         headers={
