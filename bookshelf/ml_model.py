@@ -3,7 +3,6 @@ import logging, requests
 import time, datetime
 from json import dumps
 from subprocess import call
-from urllib2 import HTTPError
 from google.cloud import bigquery
 
 #Submits job
