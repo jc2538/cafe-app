@@ -52,7 +52,7 @@ def retrain():
     # TODO: Retrain
 
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
-    #retrain_helper() 
+    retrain_helper() 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     TOKEN='ya29.Gl27BeZAze8-hxxyAOCyHKCtSJWOVkPXL4iKRTj19zqZJ5GhNe5lczzEWVXRq_sQRbV5zHJnKmAIj-0XagpoMLy5q0zNXHpKVj3_HnSInWqgQL9MISmXzAOrKmlN_SM'
 
