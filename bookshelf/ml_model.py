@@ -94,12 +94,14 @@ def retrain():
 
     time.sleep(50)
 
+    # TODO: Create new BigQuery table from a query of the table we just made above so it only has fields duration, publishedTime, and location (no nested fields)
+
     ### EXPORT BIGQUERY TABLE TO CLOUD STORAGE BUCKET AS CSV ###
     client = bigquery.Client()
     bucket_name = "cafe-app-200914-mlengine"
     project = "cafe-app-200914"
     dataset_id = 'training'
-    table_id = 'batch'
+    table_id = 'batch' # TODO: Change this to the new table without nested fields
 
     destination_uri = 'gs://{}/{}'.format(bucket_name, '/data/batch.csv')
     dataset_ref = client.dataset(dataset_id, project=project)
