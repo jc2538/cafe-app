@@ -34,10 +34,10 @@
 <div class="media">
   <div class="media-body">
     <h4 class="time-title">
-      {{wait.location}}
-      <small>Time Published: {{wait.publishedTime}}</small>
+      Location {{wait.location_id}}
+      <small>Time Published: {{wait.hour}}:{{wait.minute}}</small>
     </h4>
-    <h5 class="time-duration">Wait Duration: {{wait.duration|default('Unknown', True)}}</h5>
+    <h5 class="time-duration">Wait Duration: {{wait.wait_time|default('Unknown', True)}} minutes</h5>
     <!-- <h5 class="time-duration">Num Entities: {{wait.num_entities|default('Unknown', True)}}</h5> -->
   </div>
 </div>

@@ -6,6 +6,19 @@ import logging
 
 crud = Blueprint('crud', __name__)
 
+# Modify data format to be placed in or queue the datastore
+def modify_data(data, with_wait):
+    time = data['publishedTime']
+    hour = int(time.split(":")[0])
+    minute = int(time.split(":")[1])
+    total_minutes = hour * 60 + minute
+    if (with_wait):
+        wait_time = int(data['duration'].split(" ")[0])
+        modified_data = {"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes, "wait_time": wait_time}
+    else:
+        modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
+    return modified_data
+
 @crud.route("/")
 def list_waits():
     token = request.args.get('page_token', None)
@@ -28,7 +41,7 @@ def view(id):
 def add():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-
+        modified_data = modify_data(data, True)
         client = get_model().get_client()
         query = client.query(kind="Wait")
         iterator = query.fetch()
@@ -36,15 +49,16 @@ def add():
         num_entities = len(entities)
         # data["num_entities"] = num_entities # Adding to view data
 
-        wait = get_model().create(data) # Saving to datastore
+        wait = get_model().create(modified_data) # Saving to datastore
 
         print(str(num_entities))
         logging.info(str(num_entities))
 
         if num_entities + 1 > 10: # Threshold is 10 to batch train, +1 is to include current entity
-            get_prediction().retrain()
+            # get_prediction().retrain()
             # Delete all entities in the datastore now that they've been exported to csv file
             get_model().delete_all()
+            return redirect(url_for('.list_waits'))
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])
@@ -65,11 +79,8 @@ def query():
         # q.enqueue(tasks.process_book, book['id'])
 
         data = request.form.to_dict(flat=True)
-        time = data['publishedTime']
-        hour = int(time.split(":")[0])
-        minute = int(time.split(":")[1])
-        total_minutes = hour * 60 + minute
-        modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
+        
+        modified_data = modify_data(data, False)
         resp = get_prediction().predict_json('cafe-app-200914', 'cafe', modified_data, 'v1')
         return redirect(url_for(".query_display", response=resp))
 
@@ -77,12 +88,13 @@ def query():
 
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
-    wait = get_model().read(id)
+    wait_modified = get_model().read(id)
+    wait = {"location": wait_modified["location_id"], "publishedTime": str(wait_modified["hour"]) + ":" + str(wait_modified["minute"]), "duration": str(wait_modified["wait_time"]) + " minutes"}
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-
-        wait = get_model().update(data, id)
+        modified_data = modify_data(data, True)
+        wait = get_model().update(modified_data, id)
 
         # q = tasks.get_books_queue()
         # q.enqueue(tasks.process_book, book['id'])

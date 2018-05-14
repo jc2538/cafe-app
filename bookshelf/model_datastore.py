@@ -49,7 +49,7 @@ def from_datastore(entity):
 def list(limit=10, cursor=None):
     ds = get_client()
 
-    query = ds.query(kind='Wait', order=['publishedTime'])
+    query = ds.query(kind='Wait', order=['total_minutes'])
     query_iterator = query.fetch(limit=limit, start_cursor=cursor)
     page = next(query_iterator.pages)
 
@@ -69,6 +69,9 @@ def read(id):
 
 def update(data, id=None):
     ds = get_client()
+    print("dis data")
+    print(data)
+
     if id:
         key = ds.key('Wait', int(id))
     else:
