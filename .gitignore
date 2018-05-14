@@ -7,3 +7,4 @@ cmle-env
 bookshelf/__pycache__/
 bookshelf/cmle-env/
 locust/docker-image/locust-tasks/__pycache__/
+bookshelf/.DS_Store

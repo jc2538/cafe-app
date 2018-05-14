@@ -34,7 +34,7 @@ def add():
         iterator = query.fetch()
         entities = list(iterator)
         num_entities = len(entities)
-        data["num_entities"] = num_entities # Adding to view data
+        # data["num_entities"] = num_entities # Adding to view data
 
         wait = get_model().create(data) # Saving to datastore
 
