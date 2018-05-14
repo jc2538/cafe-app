@@ -56,7 +56,7 @@ def retrain():
     # retrain_helper() 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     
-    TOKEN='ya29.Gl27BYLMYPa-9qHPMIWxIM8xdLuLMkEjUHBGRCz4CU9-2wa4J3L5kL0toDYujHF8Qzy4eZh385Ffzq4fyqeJlHfQKgUuEX47gW8K7HRQ_5F1rx7Io5WN9KJM7bfwW-c'
+    TOKEN='ya29.Gl27BUB-LnCQgzTz6hFUhmL8C43AzdYvFwAcfW7P7bCF5NZKbQk4opngKvxFpHlh9xJx85DEQLVsjCKOhdENv2B3iV2-pdd32quZKVe4LicAJan8FMKVr__ZBeHZYyA'
 
     headers={
         "Authorization":"Bearer " + TOKEN,
