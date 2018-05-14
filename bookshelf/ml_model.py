@@ -49,7 +49,7 @@ def retrain():
 
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     
-    TOKEN='ya29.Gl27BTFxez_a6aK1J9bgFpSuYOB_OhFJd-lrdgAkmbdapdYqciPRT9CSeDFNPUOvVPO06fh5T3U-1sk0NykbQJr6ZdvAEZeug2jXrJHM60QfYDTR0mia6E8wsKfynCk'
+    TOKEN = 'ya29.Gl27BWRn5YejLed5lXm3DrUmxPAswVnWRFKxWKvDiq4dgKMzu2JZI_2lsn-vkSS4mJ4gfPUfemkCBlfc4yKOSQ_mNRXL3QknaZAUrL4BgA6lYNkdmXLn-gaXhyorhhI'
 
     headers={
         "Authorization":"Bearer " + TOKEN,
@@ -77,9 +77,9 @@ def retrain():
     print("RESPONSEDSDATA = ")
     print(responseDSData)
 
-    time.sleep(10)
+    time.sleep(12)
 
-    ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
+    ### LOAD EXPORTED ENTITIES FROM CLOUD STORAGE BUCKET TO BIGQUERY TABLE CALLED BATCH ###
 
     big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
     
@@ -126,7 +126,7 @@ def retrain():
 
     time.sleep(10)
 
-    ### CREATE NEW BQ TABLE WITHOUT NESTED FIELDS BY QUERYING ABOVE TABLE ###
+    ### CREATE NEW BQ TABLE CALLED BATCH3 WITHOUT NESTED FIELDS BY QUERYING BATCH ###
    
     client = bigquery.Client()
 
@@ -138,7 +138,7 @@ def retrain():
 
     # Start the query, passing in the extra configuration.
     query =  (
-        'SELECT location, publishedTime, duration '
+        'SELECT location_id, hour, minute, total_minutes, wait_time '
         'FROM `training.batch`')
     query_job = client.query(
         query,
@@ -149,7 +149,7 @@ def retrain():
     print("QUERY JOB FINISHED WITH 1ST ROW = " + str(rows[0]))
     # print(rows)
 
-    ### EXPORT BIGQUERY TABLE TO CLOUD STORAGE BUCKET AS CSV ###
+    ### EXPORT BIGQUERY TABLE TO CLOUD STORAGE BUCKET AS BATCH3.CSV ###
     
     bucket_name = "cafe-app-200914-mlengine"
     project = "cafe-app-200914"
@@ -172,7 +172,7 @@ def retrain():
     print('EXPORTED {}:{}.{} to {}'.format(
         project, dataset_id, table_id, destination_uri))
 
-    ### CONCATENATE TRAINING_DATA AND BATCH3 ###
+    ### CONCATENATE TRAINING_DATA AND BATCH3 CSVS###
 
     requestBodyConcat = {
       "sourceObjects": [
@@ -190,7 +190,7 @@ def retrain():
     }
     bodyConcat = dumps(requestBodyConcat)
 
-    responseConcat = requests.post("https://www.googleapis.com/storage/v1/b/cafe-app-200914-mlengine/o/data%2ftraining_data_new.csv/compose",
+    responseConcat = requests.post("https://www.googleapis.com/storage/v1/b/cafe-app-200914-mlengine/o/data%2ftraining_data.csv/compose",
         data=str(bodyConcat),
         headers={
             "Authorization":"Bearer " + TOKEN,
