@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cafe-app-200914",
+  "private_key_id": "54e9e8e2ce3e138c96dfa7028f2e72f8bf15d402",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC00AnCjjov21fG\nF4GSWveSgXUgDJdHwGXkSzYZGu3mbm2ykFfn0Md46xCMeJLKhk6b68H2X4YZD7fc\n6DULKJZqIAu5IlLD2YY8VNUv1mQdrOBZ1myhLk/oEKjsjl5mGW6DpnskWF7dpJ9q\nDjjL/zlcsxC4XHk5odBS7kus+VX/tZn1UF2TPblA+MEukgtBTIEr0onLDFg8OfN4\nC24bzzhXxqU/gSFKSaZPsCPhYm9u0LvUilILZaHO1m+FYud1eXEU1LHlERUKiuhH\ng6CwtNr1YnJVoxTflXN2wq4C7U3allNjjVQgIKvadiIhdopVCBvM1YaVC3W8O6+k\nyA5wglSTAgMBAAECggEANhSrdqe3u6ytejB5rt7KgeV6tNVPQkTHtRrR2Xx2f5+z\n697EjC+kGgSk9H7z2OOHC5feceRsZX6QDeDeTLIdGyzulLcxbibXwZ/WC/LiCwY0\nLGq4HxWNDOo+vFJw5bThmzrmRh6wcTbV/5C1aD60V4evjpUKJTTC7Ksds2T4Vfzo\nI/OoYrYKnpOT02AyJEyl3FQ9t1Knc+0dUy0ZY3yvXe/bp+O+stCg1OkMaA602UB2\n2Mzc0fXiR0SOBVPAREaz8G6gBhY9mTNhQzAtqEHmwNdITQZRxIDyTulnPfxyPknD\nLCQEDQKYaXdefzcGdUv45EujMqV1SYNAICqup7cHwQKBgQDpz9+4SzOnkGpRq3hG\ngy5Y6h8ehKN8JSmPiaL6qEhJ7dV3BnEoJxi4B/dkJC5mO/8Hv9S0BRKhYTB6dyt+\nXGZearxP/0/Q2GyRmxL2SXvwAaXo8thkYOUxZ5fqkkae/tL0mehgRj50A+2SgjoW\nzbANERo7z4Tg1ZvZbFPqhDtzQwKBgQDF+J8A+6+FQvs4IC9MKtFqTQJnmQw6lXnz\nPyozPb7XtSat36LWSU8Gf81rLMW/EjRbSII+n9+MknCuo10HQLzf83wF/7A9iuMK\nZXreD/zu/bAJV7woD3y9PfOLUQzcUsp7XS3yxEzfa/ezgMK2E+OPlCc5w47je41m\npPiH4NB8cQKBgQDmDT2f1IZ/ka26q89M+dfJbpqt6W3+QYZyD8fHf3qZGyUU1sbR\n7h35PQVih+MLfm7BTjNX6UHafYk4hjbKPtoOflDJGXmMENZKMd3nbIhAry5yVTcr\nFNeN09L633ATEsG4IBMvXw4mEpNXu0CynTFiufgo71db7XFJ7bdnoTHphwKBgEFr\npFe11E3MUao9cIPSDnv7UNUdTV46sR8B+5cNS3iK42pH4c7AUP4L070cAYjfoi+c\nKXY6bKxOZDBByecwrHmxQ4XT9dCQifCQkma5j9MGQFsGBCaU35rF0ypxsTdJoKHd\nq+Zymhim3CcUYMO8lNGImuHKzvg7hwGpeHumfh7xAoGAYIzk1mIq65/gTOW62OMv\nz2PvIoyGPKnUeZu4im0TzrkmKlfgytFnQYJ0ITQG+O1UKT2LjjR/uYx06mergsCb\ncB0UWbRpjjjVqYGsLyKI9aXaLv/ObzrdHMS65aifSPnCq10+RyOKDUozFQi3wxtx\n8tuFuJW6lCSn6BMTeQkBihU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "bigquery@cafe-app-200914.iam.gserviceaccount.com",
+  "client_id": "117575797726697969653",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bigquery%40cafe-app-200914.iam.gserviceaccount.com"
+}

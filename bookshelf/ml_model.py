@@ -1,7 +1,18 @@
 import googleapiclient.discovery
 import logging, requests
+import aiohttp
+import asyncio
 from json import dumps
 from subprocess import call
+
+async def fetch(session, url, json):
+    async with session.post(url, json=json) as response:
+        return await response.json()
+
+async def request(url, body, headers):
+    async with aiohttp.ClientSession(headers=headers) as session:
+        response = await fetch(session, url, body)
+        return response
 
 def retrain():
     # TODO: Export entities into a csv for the training batch
@@ -9,33 +20,86 @@ def retrain():
     # TODO: Concatenate csv with existing training data
     # TODO: Retrain
 
+    ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
     GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 
-    requestBody = {
+    headers={
+        "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+        "Content-Type":"application/json"
+        }
+    urlDS = "https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export"
+    requestBodyDS = {
         "entityFilter": {
             "kinds": ["Wait"],
             "namespaceIds": [""]
             },
         "outputUrlPrefix": "gs://cafe-app-datastore"
         }
-    body = dumps(requestBody)
-
-    r = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
-        data=str(body),
-        headers={
-            "Authorization":"Bearer ya29.Gl27BZ8w1QT-jyZUc1RO3HvV7Pwb5NlQwiwDSGSaDaqs9NwuK8S0K3qvacn2Y4bKx1EqUOxezbyC3ZZTjDkNQphxdgLmHCH47Jc7ZxHBAy6WUvX9LBjPkE1W430pVzE",
-            "Content-Type":"application/json"}
-        )
+    bodyDS = dumps(requestBodyDS)
     
-    print(r.status_code, r.reason, r.text)
+        
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    responseDSData = loop.run_until_complete(request(urlDS, requestBodyDS, headers))
 
-    responseData = r.json()
-    outputUrlPrefix = responseData["metadata"]["outputUrlPrefix"]
-    exportedDataPath = outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata"
+    # responseDS = requests.post("https://datastore.googleapis.com/v1beta1/projects/cafe-app-200914:export",
+    # data=str(bodyDS),
+    # headers={
+    #     "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+    #     "Content-Type":"application/json"}
+    # )
 
-    print(exportedDataPath)
+    print("responseDSData = ")
+    print(responseDSData)
 
-    print("RETRAIN UNIMPLEMENTED")
+    # ### LOAD METADATA FROM CLOUD STORAGE BUCKET TO BIGQUERY ###
+    # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
+    
+    # outputUrlPrefix = responseDSData["metadata"]["outputUrlPrefix"]
+    # exportedDataPath = str(outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata")
+
+    # print("exportedDataPath = " + exportedDataPath)
+
+    # urlBQ = "https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert"
+    # requestBodyBQ = {
+    #   "configuration": {
+    #     "load": {
+    #       "sourceUris": [
+    #         exportedDataPath
+    #       ],
+    #       "sourceFormat": "DATASTORE_BACKUP",
+    #       "destinationTable": {
+    #         "datasetId": "training",
+    #         "projectId": "cafe-app-200914",
+    #         "tableId": "batch"
+    #       },
+    #       "timePartitioning": {
+    #         "type": "DAY"
+    #       },
+    #       "writeDisposition": "WRITE_TRUNCATE" 
+    #     }
+    #   },
+    #   "jobReference": {
+    #     "location": "US"
+    #   }
+    # }
+    # bodyBQ = dumps(requestBodyBQ)
+    # print("requestBodyBQ = ")
+    # print(requestBodyBQ)
+    # print("bodyBQ = ")
+    # print(bodyBQ)
+
+    # responseBQData = loop.run_until_complete(request(urlBQ, requestBodyBQ, headers))
+    # print("responseBQData = ")
+    # print(responseBQData)
+    # responseBQ = requests.post("https://www.googleapis.com/bigquery/v2/projects/projectId/jobs:insert",
+    #     data=str(bodyBQ),
+    #     headers={
+    #         "Authorization":"Bearer ya29.Gl27BZbKv4v_DAhnBpddlJAroKlny_3FmJOF9TMYhYbHSyIbhU5Y1K2-37-Xb4DsA15ZP0W5Ccgo-aWCCXMz0SBlt-V1LgEtIKT_WO_KCvsAFUWl0uNtosPpi0DNRhY",
+    #         "Content-Type":"application/json"}
+    #     )
+    # print(responseBQ.status_code, responseBQ.reason, responseBQ.text)
+    # responseBQData = responseBQ.json()
 
 def predict_json(project, model, instances, version=None):
     """Send json data to a deployed model for prediction.
