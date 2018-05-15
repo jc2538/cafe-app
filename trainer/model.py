@@ -33,34 +33,7 @@ INPUT_COLUMNS = [
 
 UNUSED_COLUMNS = set(CSV_COLUMNS) - {col.name for col in feature_columns} - \
     {"wait_time"}
-
-# def parse_label_column(label_string_tensor):
-#   """Parses a string tensor into the label tensor
-#   Args:
-#     label_string_tensor: Tensor of dtype string. Result of parsing the
-#     CSV column specified by LABEL_COLUMN
-#   Returns:
-#     A Tensor of the same shape as label_string_tensor, should return
-#     an int64 Tensor representing the label index for classification tasks,
-#     and a float32 Tensor representing the value for a regression task.
-#   """
-#   # Build a Hash Table inside the graph
-#   table = tf.contrib.lookup.index_table_from_tensor(tf.constant(LABELS))
-
-#   # Use the hash table to convert string labels to ints and one-hot encode
-#   return table.lookup(label_string_tensor)
- 
-# def _parse_line(line):
-#   """Splits a csv line into pair (features, labels)"""
-#   fields = tf.decode_csv(line, FIELD_DEFAULTS)
-#   features = dict(zip(COLUMNS, fields))
-#   try:
-#     label = features.pop('wait_time')
-#     return features, label
-#   except KeyError:
-#     return features
-
-#Added from EX code
+    
 
 def csv_serving_input_fn():
   """Build the serving inputs."""
@@ -167,44 +140,6 @@ def input_fn(filenames,
     return features, label
   except KeyError:
     return features
-    
-#added from EX code
-
-# def csv_input_fn(csv_path, batch_size):
-#   """An input function for training"""
-#   # Convert csv input into Dataset
-#   dataset = tf.data.TextLineDataset(csv_path).skip(1)
-#   dataset = dataset.map(_parse_line)
-
-#   # Shuffle, repeat, and batch the examples
-#   assert batch_size is not None, "batch_size must not be None"
-#   dataset = dataset.shuffle(1000).repeat().batch(batch_size)
-
-#   return dataset
-
-# def eval_input_fn(csv_path, batch_size):
-#   """An input function for evaluation"""
-#   # Convert csv input into Dataset
-#   dataset = tf.data.TextLineDataset(csv_path).skip(1)
-#   dataset = dataset.map(_parse_line)
-
-#   # Batch the examples
-#   assert batch_size is not None, "batch_size must not be None"
-#   dataset = dataset.batch(batch_size)
-
-#   return dataset
-
-# def pred_input_fn(features, batch_size):
-#   """An input function for prediction - input is a dict not csv"""
-#   # Convert feature inputs into Dataset
-#   inputs = dict(features)
-#   print(inputs)
-#   dataset = tf.data.Dataset.from_tensor_slices(inputs)
-#   print(dataset)
-#   # Batch the examples
-#   assert batch_size is not None, "batch_size must not be None"
-#   dataset = dataset.batch(batch_size)
-#   return dataset
 
 def build_estimator(config):
   # Build the Estimator.
