@@ -6,7 +6,7 @@ from subprocess import call
 from google.cloud import bigquery
 from google.cloud import storage
 from threading import Timer
-from urllib2 import HTTPError
+import urllib
 
 TOKEN = 'ya29.Gl28BQu2YEMecrKAUUDhNP1Z7augy581E81u-t2tDtSzBSZd_Ey5ve8RO8hNM_5u_fntAlS_re9ZxHv_zYVSUlQA5hZ1Plqp6WM81U6vTA6eN26dmEWt05g_1FU6kVc'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
@@ -43,7 +43,7 @@ def retrain_helper():
         response = request.execute()
         # You can put your code for handling success (if any) here.
 
-    except HTTPError as err:
+    except error.HTTPError as err:
         # Do whatever error response is appropriate for your application.
         # For this example, just send some text to the logs.
         # You need to import logging for this to work.
@@ -103,7 +103,7 @@ def deploy_model(projectID, bucketName, versionName):
 
         # Any additional code on success goes here (logging, etc.)
 
-    except HTTPError as err:
+    except error.HTTPError as err:
         # Something went wrong, print out some information.
         print('There was an error creating the model.' +
             ' Check the details:')
@@ -130,7 +130,7 @@ def deploy_model(projectID, bucketName, versionName):
 
         # Any additional code on success goes here (logging, etc.)
 
-    except HTTPError as err:
+    except error.HTTPError as err:
         # Something went wrong, print out some information.
         print('There was an error creating the version.' +
               ' Check the details:')
