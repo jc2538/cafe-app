@@ -75,7 +75,7 @@ def add():
         logging.info(str(num_entities))
 
         if num_entities + 1 > 2: # Threshold is 10 to batch train, +1 is to include current entity
-            button = "disabled"
+            button = ""
             href = "return false;"
             Thread(target=get_prediction().retrain).start()
             # Delete all entities in the datastore now that they've been exported to csv file

@@ -6,9 +6,9 @@ from subprocess import call
 from google.cloud import bigquery
 from google.cloud import storage
 from threading import Timer
-from urllib import error
+from urllib2 import HTTPError
 
-TOKEN = 'ya29.Gl28Bfk7jWydZ2Ksoc-rD-iHFHgBNmX_Hks1_rIF_V0mGs5539RPTqVG0TP_VVv-j_xarh_mWG8dkn6o8LUbOZeoKc9nWL3MVUPJfskoyfyi_ZN23pQHqW3m2Xx47NQ'
+TOKEN = 'ya29.Gl28BWhSNit91jvbOBoBzYq9y-eVBZdlMY_t6Wpw-6zcjfEMwf-HyE-dOZjAidwgfBfo9WeRrezoC532uGo-MSX2cEtH2CQi_5HKufdYFOJTT0l6-_W6Bm9-JJGcOUo'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
 
@@ -43,7 +43,7 @@ def retrain_helper():
         response = request.execute()
         # You can put your code for handling success (if any) here.
 
-    except error.HTTPError as err:
+    except HTTPError as err:
         # Do whatever error response is appropriate for your application.
         # For this example, just send some text to the logs.
         # You need to import logging for this to work.
@@ -75,7 +75,8 @@ def deploy_model(projectID, bucketName, versionName):
     blobs = bucket.list_blobs()
 
     for blob in blobs:
-        if (versionName in blob.name and 'saved_model.pb' in blob.name):
+        # print(blob.name)
+        if (versionName in blob.name and 'saved_model.pb' in blob.name and blob.name != versionName + "/saved_model.pb"):
             print("hereversion")
             print(blob.name)
             new_blob = bucket.rename_blob(blob, versionName + "/saved_model.pb")
@@ -112,10 +113,9 @@ def deploy_model(projectID, bucketName, versionName):
     #     # Clear the response for next time.
     #     response = None
 
-    requestDict = {'name': 'v1',
+    requestDict = {'name': versionName,
         'description': versionDescription,
         'deploymentUri': trainedModelLocation,
-        "isDefault": True,
         "runtimeVersion": "1.4"}
 
     # Create a request to call projects.models.versions.create
@@ -131,13 +131,18 @@ def deploy_model(projectID, bucketName, versionName):
 
         # Any additional code on success goes here (logging, etc.)
 
-    except error.HTTPError as err:
+    except HTTPError as err:
         # Something went wrong, print out some information.
         print('There was an error creating the version.' +
               ' Check the details:')
         print(err._get_reason())
 
         # Handle the exception as makes sense for your application.
+
+    responseDS = requests.post("https://ml.googleapis.com/v1/projects/cafe-app-200914/models/cafe/versions/" + versionName + ":setDefault")
+    responseDSData = responseDS.json()
+    print("RESPONSEDSDATA = ")
+    print(responseDSData)
 
     # done = False
     # request = ml.projects().operations().get(name=operationID)
