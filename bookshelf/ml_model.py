@@ -6,9 +6,9 @@ from subprocess import call
 from google.cloud import bigquery
 from google.cloud import storage
 from threading import Timer
-import urllib
+from urllib import error
 
-TOKEN = 'ya29.Gl28BYzHS7tRzHnXXf_2_MaNqwb4IXwK_-X5KFP0IL3TPW1-ZpXH86bT7iQI4-VWStO9yIQBe-Hyet8SFpl-gVSTBiRz8FDxqUTHo3cMjlZDP_Ljf1d2N34dY3gAm8Y'
+TOKEN = 'ya29.Gl28Bfk7jWydZ2Ksoc-rD-iHFHgBNmX_Hks1_rIF_V0mGs5539RPTqVG0TP_VVv-j_xarh_mWG8dkn6o8LUbOZeoKc9nWL3MVUPJfskoyfyi_ZN23pQHqW3m2Xx47NQ'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
 
@@ -81,7 +81,7 @@ def deploy_model(projectID, bucketName, versionName):
             new_blob = bucket.rename_blob(blob, versionName + "/saved_model.pb")
             print('Blob {} has been renamed to {}'.format(blob.name, new_blob.name))
 
-    modelName = versionName + "_model"
+    modelName = 'cafe'
     modelID = '{}/models/{}'.format(projectID, modelName)
     # versionName = 'version_name'
     versionDescription = 'version_description'
@@ -90,31 +90,32 @@ def deploy_model(projectID, bucketName, versionName):
     ml = googleapiclient.discovery.build('ml', 'v1')
 
     # Create a dictionary with the fields from the request body.
-    requestDict = {'name': modelName,
-        'description': 'Another model for testing.'}
+    # requestDict = {'name': modelName,
+    #     'description': 'Another model for testing.'}
 
-    # Create a request to call projects.models.create.
-    request = ml.projects().models().create(parent=projectID,
-                                body=requestDict)
+    # # Create a request to call projects.models.create.
+    # request = ml.projects().models().create(parent=projectID,
+    #                             body=requestDict)
 
-    # Make the call.
-    try:
-        response = request.execute()
+    # # Make the call.
+    # try:
+    #     response = request.execute()
 
-        # Any additional code on success goes here (logging, etc.)
+    #     # Any additional code on success goes here (logging, etc.)
 
-    except error.HTTPError as err:
-        # Something went wrong, print out some information.
-        print('There was an error creating the model.' +
-            ' Check the details:')
-        print(err._get_reason())
+    # except error.HTTPError as err:
+    #     # Something went wrong, print out some information.
+    #     print('There was an error creating the model.' +
+    #         ' Check the details:')
+    #     print(err._get_reason())
 
-        # Clear the response for next time.
-        response = None
+    #     # Clear the response for next time.
+    #     response = None
 
     requestDict = {'name': 'v1',
         'description': versionDescription,
         'deploymentUri': trainedModelLocation,
+        "isDefault": True,
         "runtimeVersion": "1.4"}
 
     # Create a request to call projects.models.versions.create

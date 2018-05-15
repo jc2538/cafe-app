@@ -9,6 +9,8 @@ crud = Blueprint('crud', __name__)
 global button, href
 button = "" 
 href = ""
+location_dict = {"Mattins": 0, "Terrace": 1, "Gimme Coffee": 2}
+reverse_location_dict = {0: "Mattins", 1: "Terrace", 2: "Gimme Coffee"}
 
 # Modify data format to be placed in or queue the datastore
 def modify_data(data, with_wait):
@@ -16,11 +18,12 @@ def modify_data(data, with_wait):
     hour = int(time.split(":")[0])
     minute = int(time.split(":")[1])
     total_minutes = hour * 60 + minute
+    print(location_dict[data["location"]])
     if (with_wait):
         wait_time = int(data['duration'].split(" ")[0])
-        modified_data = {"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes, "wait_time": wait_time}
+        modified_data = {"location_id": location_dict[data["location"]], "hour": hour, "minute": minute, "total_minutes": total_minutes, "wait_time": wait_time}
     else:
-        modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
+        modified_data = [{"location_id": location_dict[data["location"]], "hour": hour, "minute": minute, "total_minutes": total_minutes}]
     return modified_data
 
 # def retrain_helper():
@@ -106,7 +109,7 @@ def query():
         data = request.form.to_dict(flat=True)
         
         modified_data = modify_data(data, False)
-        resp = get_prediction().predict_json('cafe-app-200914', 'cafe', modified_data, 'v1')
+        resp = get_prediction().predict_json('cafe-app-200914', 'cafe', modified_data)
         return redirect(url_for(".query_display", response=resp))
 
     return render_template("query.html", wait={}, resp="N/A")
@@ -114,7 +117,11 @@ def query():
 @crud.route('/<id>/edit', methods=['GET', 'POST'])
 def edit(id):
     wait_modified = get_model().read(id)
-    wait = {"location": wait_modified["location_id"], "publishedTime": str(wait_modified["hour"]) + ":" + str(wait_modified["minute"]), "duration": str(wait_modified["wait_time"]) + " minutes"}
+    # print(reverse_location_dict[wait_modified["location_id"]])
+    print("HEREEE")
+    location_dict_edit = {0: "", 1: "", 2: ""}
+    location_dict_edit[wait_modified["location_id"]] = "selected"
+    wait = {"location": reverse_location_dict[wait_modified["location_id"]], "publishedTime": str(wait_modified["hour"]) + ":" + str(wait_modified["minute"]), "duration": str(wait_modified["wait_time"]) + " minutes"}
 
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
@@ -126,7 +133,7 @@ def edit(id):
 
         return redirect(url_for('.view', id=wait['id']))
 
-    return render_template("form.html", action="Edit", wait=wait)
+    return render_template("form.html", action="Edit", wait=wait, mattins=location_dict_edit[0], terrace=location_dict_edit[1], gimme=location_dict_edit[2])
 
 @crud.route('/<id>/delete')
 def delete(id):
