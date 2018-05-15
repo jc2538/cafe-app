@@ -5,6 +5,10 @@ from json import dumps
 from subprocess import call
 from google.cloud import bigquery
 
+TOKEN = 'ya29.Gl28Bb8G80AXu1VKnmrJdAxLjrcIqt4y2U4rpiHsQZw6nIyo4gz3mtdRg61AfbZEUlzTY3guTOhhuq0flMURDIrjGPwKS0GrLaeomC69sfyzPtaz8qMKINr29Pj9sAo'
+# GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
+# big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
+
 # Submits job
 def retrain_helper():
     JOB_NAME = 'cafe_' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
@@ -47,10 +51,6 @@ def retrain_helper():
 def retrain():
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
 
-    GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
-    
-    TOKEN = 'ya29.Gl27BWRn5YejLed5lXm3DrUmxPAswVnWRFKxWKvDiq4dgKMzu2JZI_2lsn-vkSS4mJ4gfPUfemkCBlfc4yKOSQ_mNRXL3QknaZAUrL4BgA6lYNkdmXLn-gaXhyorhhI'
-
     headers={
         "Authorization":"Bearer " + TOKEN,
         "Content-Type":"application/json"
@@ -80,8 +80,6 @@ def retrain():
     time.sleep(12)
 
     ### LOAD EXPORTED ENTITIES FROM CLOUD STORAGE BUCKET TO BIGQUERY TABLE CALLED BATCH ###
-
-    big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
     
     outputUrlPrefix = responseDSData["metadata"]["outputUrlPrefix"]
     exportedDataPath = str(outputUrlPrefix + "/default_namespace/kind_Wait/default_namespace_kind_Wait.export_metadata")
@@ -218,7 +216,6 @@ def predict_json(project, model, instances, version=None):
             model.
     """
 
-    GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
     service = googleapiclient.discovery.build('ml', 'v1', cache_discovery=False)
     name = 'projects/{}/models/{}'.format(project, model)
 
