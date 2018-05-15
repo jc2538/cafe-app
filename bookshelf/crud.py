@@ -85,7 +85,7 @@ def add():
 
             #TODO: Prevent user from adding or modifying entities while threads complete
 
-            # get_prediction().deploy_model('projects/cafe-app-200914', 'cafe-app-200914-mlengine', 'cafe_20180514_194742')
+            # get_prediction().deploy_model('projects/cafe-app-200914', 'cafe-app-200914-mlengine', 'cafe_20180515_030158')
             return redirect(url_for('.list_waits'))
 
         # q = tasks.get_books_queue()

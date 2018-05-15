@@ -6,7 +6,7 @@ from subprocess import call
 from google.cloud import bigquery
 from google.cloud import storage
 from threading import Timer
-from urllib2 import HTTPError
+from urllib.error import HTTPError
 
 TOKEN = 'ya29.Gl28BWhSNit91jvbOBoBzYq9y-eVBZdlMY_t6Wpw-6zcjfEMwf-HyE-dOZjAidwgfBfo9WeRrezoC532uGo-MSX2cEtH2CQi_5HKufdYFOJTT0l6-_W6Bm9-JJGcOUo'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
@@ -139,10 +139,18 @@ def deploy_model(projectID, bucketName, versionName):
 
         # Handle the exception as makes sense for your application.
 
-    responseDS = requests.post("https://ml.googleapis.com/v1/projects/cafe-app-200914/models/cafe/versions/" + versionName + ":setDefault")
-    responseDSData = responseDS.json()
-    print("RESPONSEDSDATA = ")
-    print(responseDSData)
+    # responseDS = requests.post("https://ml.googleapis.com/v1/projects/cafe-app-200914/models/cafe/versions/" + versionName + ":setDefault",
+    #     headers={
+    #         "Authorization":"Bearer " + TOKEN,
+    #         "Content-Type":"application/json"}
+    # )
+    Timer(300.0, requests.post, args=["https://ml.googleapis.com/v1/projects/cafe-app-200914/models/cafe/versions/" + versionName + ":setDefault",
+        {
+            "Authorization":"Bearer " + TOKEN,
+            "Content-Type":"application/json"}]).start()
+    # responseDSData = responseDS.json()
+    # print("RESPONSEDSDATA = ")
+    # print(responseDSData)
 
     # done = False
     # request = ml.projects().operations().get(name=operationID)
