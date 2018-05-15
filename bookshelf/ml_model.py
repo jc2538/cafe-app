@@ -5,7 +5,7 @@ from json import dumps
 from subprocess import call
 from google.cloud import bigquery
 
-TOKEN = 'ya29.Gl28Bb8G80AXu1VKnmrJdAxLjrcIqt4y2U4rpiHsQZw6nIyo4gz3mtdRg61AfbZEUlzTY3guTOhhuq0flMURDIrjGPwKS0GrLaeomC69sfyzPtaz8qMKINr29Pj9sAo'
+TOKEN = 'ya29.Gl28BY8axkZP-nJt-35rfQjUr_L5FsQzgLPCJiV3hbr9Ztw8v7dTCo_Upn9pytijtn-XtRqm6N2_Q-cFPeiobG7S32AnDjkwyfvv91kjQwJFSWcbNYqZGl4SlcgiNgM'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
 
