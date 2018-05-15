@@ -8,7 +8,7 @@ from google.cloud import storage
 from threading import Timer
 import urllib
 
-TOKEN = 'ya29.Gl28BQu2YEMecrKAUUDhNP1Z7augy581E81u-t2tDtSzBSZd_Ey5ve8RO8hNM_5u_fntAlS_re9ZxHv_zYVSUlQA5hZ1Plqp6WM81U6vTA6eN26dmEWt05g_1FU6kVc'
+TOKEN = 'ya29.Gl28BYzHS7tRzHnXXf_2_MaNqwb4IXwK_-X5KFP0IL3TPW1-ZpXH86bT7iQI4-VWStO9yIQBe-Hyet8SFpl-gVSTBiRz8FDxqUTHo3cMjlZDP_Ljf1d2N34dY3gAm8Y'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
 
