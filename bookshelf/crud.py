@@ -3,8 +3,12 @@ from bookshelf import get_model, get_prediction, storage, tasks
 from flask import Blueprint, current_app, redirect, render_template, request, \
     session, url_for
 import logging
-
+from threading import Thread, Timer
+# from multiprocessing import Process
 crud = Blueprint('crud', __name__)
+global button, href
+button = "" 
+href = ""
 
 # Modify data format to be placed in or queue the datastore
 def modify_data(data, with_wait):
@@ -19,6 +23,16 @@ def modify_data(data, with_wait):
         modified_data = [{"location_id": 0, "hour": hour, "minute": minute, "total_minutes": total_minutes}]
     return modified_data
 
+# def retrain_helper():
+#     print("retrain helperrr")
+#     get_prediction().retrain()
+#     get_model().delete_all()
+
+def button_on():
+    global button, href
+    button = ""
+    href = ""
+
 @crud.route("/")
 def list_waits():
     token = request.args.get('page_token', None)
@@ -29,6 +43,8 @@ def list_waits():
 
     return render_template(
         "list.html",
+        disabled=button,
+        entity=href,
         waits=waits,
         next_page_token=next_page_token)
 
@@ -39,6 +55,7 @@ def view(id):
 
 @crud.route('/add', methods=['GET', 'POST'])
 def add():
+    global button, href
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
         modified_data = modify_data(data, True)
@@ -55,9 +72,17 @@ def add():
         logging.info(str(num_entities))
 
         if num_entities + 1 > 2: # Threshold is 10 to batch train, +1 is to include current entity
-            get_prediction().retrain()
+            button = "disabled"
+            href = "return false;"
+            Thread(target=get_prediction().retrain).start()
             # Delete all entities in the datastore now that they've been exported to csv file
-            get_model().delete_all()
+            Timer(30.0, get_model().delete_all).start()
+            Timer(30.0, button_on).start()
+
+
+            #TODO: Prevent user from adding or modifying entities while threads complete
+
+            # get_prediction().deploy_model('projects/cafe-app-200914', 'cafe-app-200914-mlengine', 'cafe_20180514_194742')
             return redirect(url_for('.list_waits'))
 
         # q = tasks.get_books_queue()

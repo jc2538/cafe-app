@@ -94,7 +94,7 @@ def delete(id):
     ds.delete(key)
 
 def delete_all():
-    ds = get_client()
+    ds = datastore.Client('cafe-app-200914')
     query = ds.query(kind='Wait')
     fetched = query.fetch()
     for entity in fetched:

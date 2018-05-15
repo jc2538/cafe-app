@@ -19,7 +19,7 @@
 {% block content %}
 
 <h3>Wait Times</h3>
-<a href="/waits/add" class="btn btn-success btn-sm">
+<a href="/waits/add" class="btn btn-success btn-sm" {{disabled}}>
   <i class="glyphicon glyphicon-plus"></i>
   Add wait time
 </a>
@@ -31,7 +31,7 @@
 
 {% for wait in waits %}
 <div class="media">
-  <a href="/waits/{{wait.id}}">
+  <a href="/waits/{{wait.id}}" onclick="{{entity}}">
     <div class="media-body">
       <h4>{{wait.location_id}}</h4>
        <p>{{wait.hour}}:{{wait.minute}}</p>

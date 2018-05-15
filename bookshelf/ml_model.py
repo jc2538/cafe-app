@@ -4,8 +4,11 @@ import time, datetime
 from json import dumps
 from subprocess import call
 from google.cloud import bigquery
+from google.cloud import storage
+from threading import Timer
+from urllib2 import HTTPError
 
-TOKEN = 'ya29.Gl28BY8axkZP-nJt-35rfQjUr_L5FsQzgLPCJiV3hbr9Ztw8v7dTCo_Upn9pytijtn-XtRqm6N2_Q-cFPeiobG7S32AnDjkwyfvv91kjQwJFSWcbNYqZGl4SlcgiNgM'
+TOKEN = 'ya29.Gl28BQu2YEMecrKAUUDhNP1Z7augy581E81u-t2tDtSzBSZd_Ey5ve8RO8hNM_5u_fntAlS_re9ZxHv_zYVSUlQA5hZ1Plqp6WM81U6vTA6eN26dmEWt05g_1FU6kVc'
 # GOOGLE_APPLICATION_CREDENTIALS='cafe-app-f9f9134f1cd3.json'
 # big_query_service_acct = "cafe-app-54e9e8e2ce3e.json"
 
@@ -47,6 +50,118 @@ def retrain_helper():
         logging.error('There was an error creating the training job.'
                       ' Check the details:')
         logging.error(err._get_reason())
+
+    Timer(600.0, deploy_model, args=[project_id, 'cafe-app-200914-mlengine', JOB_NAME]).start()
+
+def deploy_model(projectID, bucketName, versionName):
+    # projectID = 'projects/{}'.format('project_name')
+    print("starting job NOW :(")
+    print(bucketName)
+    print(versionName)
+
+    # Rename .pbtxt file
+    # storage_client = storage.Client()
+    # bucket = storage_client.get_bucket(bucketName)
+    # blob = bucket.blob(versionName + "/saved_model.pbtxt")
+
+    # new_blob = bucket.rename_blob(blob, versionName + "/graph.pbtxt")
+
+
+    # print('Blob {} has been renamed to {}'.format(blob.name, new_blob.name))
+
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucketName)
+
+    blobs = bucket.list_blobs()
+
+    for blob in blobs:
+        if (versionName in blob.name and 'saved_model.pb' in blob.name):
+            print("hereversion")
+            print(blob.name)
+            new_blob = bucket.rename_blob(blob, versionName + "/saved_model.pb")
+            print('Blob {} has been renamed to {}'.format(blob.name, new_blob.name))
+
+    modelName = versionName + "_model"
+    modelID = '{}/models/{}'.format(projectID, modelName)
+    # versionName = 'version_name'
+    versionDescription = 'version_description'
+    trainedModelLocation = 'gs://' + bucketName + "/" + versionName
+
+    ml = googleapiclient.discovery.build('ml', 'v1')
+
+    # Create a dictionary with the fields from the request body.
+    requestDict = {'name': modelName,
+        'description': 'Another model for testing.'}
+
+    # Create a request to call projects.models.create.
+    request = ml.projects().models().create(parent=projectID,
+                                body=requestDict)
+
+    # Make the call.
+    try:
+        response = request.execute()
+
+        # Any additional code on success goes here (logging, etc.)
+
+    except HTTPError as err:
+        # Something went wrong, print out some information.
+        print('There was an error creating the model.' +
+            ' Check the details:')
+        print(err._get_reason())
+
+        # Clear the response for next time.
+        response = None
+
+    requestDict = {'name': 'v1',
+        'description': versionDescription,
+        'deploymentUri': trainedModelLocation,
+        "runtimeVersion": "1.4"}
+
+    # Create a request to call projects.models.versions.create
+    request = ml.projects().models().versions().create(parent=modelID,
+                  body=requestDict)
+
+    # Make the call.
+    try:
+        response = request.execute()
+
+        # Get the operation name.
+        operationID = response['name']
+
+        # Any additional code on success goes here (logging, etc.)
+
+    except HTTPError as err:
+        # Something went wrong, print out some information.
+        print('There was an error creating the version.' +
+              ' Check the details:')
+        print(err._get_reason())
+
+        # Handle the exception as makes sense for your application.
+
+    # done = False
+    # request = ml.projects().operations().get(name=operationID)
+
+    # while not done:
+    #     response = None
+
+    #     # Wait for 300 milliseconds.
+    #     time.sleep(0.3)
+
+    # # Make the next call.
+    # try:
+    #     response = request.execute()
+
+    #     # Check for finish.
+    #     done = response.get('done', False)
+
+    # except HTTPError as err:
+    #     # Something went wrong, print out some information.
+    #     print('There was an error getting the operation.' +
+    #           'Check the details:')
+    #     print(err._get_reason())
+    #     done = True
+
+
     
 def retrain():
     ### EXPORT BATCH TRAINING DATA FROM DATASTORE TO CLOUD STORAGE BUCKET ###
