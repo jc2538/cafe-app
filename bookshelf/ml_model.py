@@ -360,7 +360,11 @@ def predict_json(project, model, instances, version=None):
         return "error"
         raise RuntimeError(response['error'])
 
-    return str(response['predictions'][0]['predictions'][0]) + " minutes"
+    resp_final = response['predictions'][0]['predictions'][0]
+    if resp_final < 0:
+        resp_final = 0
+
+    return str(resp_final) + " minutes"
 
 # def get_token():
 #     # CLIENT_ID = 795479451499-r06p1nlp3dgpiuhtba3pvblootc6afmv.apps.googleusercontent.com
