@@ -8,7 +8,7 @@ class MetricsTaskSet(TaskSet):
 
     @task(1)
     def add(self):
-        location = 0 # TODO: change once all locationIds established
+        location = "Mattins" # TODO: change once all locationIds established
         
         current_time = datetime.now()
         hour = current_time.hour
