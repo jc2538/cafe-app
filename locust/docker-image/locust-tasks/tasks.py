@@ -56,7 +56,7 @@ class MetricsTaskSet(TaskSet):
         publishedTime = str(current_time.hour) + ":" + str(current_time.minute)
 
         self.client.post(
-            "/query", {"location_id": location_id, "publishedTime": publishedTime})
+            "/query", {"location": location_id, "publishedTime": publishedTime})
 
 class MetricsLocust(HttpLocust):
     task_set = MetricsTaskSet
