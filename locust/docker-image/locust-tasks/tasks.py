@@ -51,7 +51,7 @@ class MetricsTaskSet(TaskSet):
 
     @task(5)
     def query(self):
-        location_id = 0 # TODO: change once all locationIds established
+        location_id = "Mattins" # TODO: change once all locationIds established
         current_time = datetime.now()
         publishedTime = str(current_time.hour) + ":" + str(current_time.minute)
 
