@@ -80,7 +80,7 @@ PyMySQL==0.8.0
 pyOpenSSL==17.5.0
 pytz==2018.4
 requests==2.18.4
-rsa==3.4.2
+rsa==4.7
 six==1.11.0
 SQLAlchemy==1.2.7
 tensorboard==1.8.0
